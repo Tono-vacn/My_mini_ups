@@ -6,7 +6,7 @@ class World(models.Model):
     world_name = models.CharField(max_length=100, default="None")
     active_status = models.BooleanField(default=True)
     
-class Account_(models.Model):
+class Account_tmp(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
   account_world = models.ForeignKey(World, on_delete=models.CASCADE)
   
@@ -18,9 +18,9 @@ class Truck_Set(models.Model):
     pos_y = models.CharField(max_length=30)
     truck_world = models.ForeignKey(World, on_delete=models.CASCADE)
     
-class Package_(models.Model):
+class Package_tmp(models.Model):
     pkg_id = models.CharField(max_length=100, primary_key=True)
-    pkg_user = models.ForeignKey(Account_, null= True, on_delete=models.CASCADE)
+    pkg_user = models.ForeignKey(Account_tmp, null= True, on_delete=models.CASCADE)
     pkg_truck = models.ForeignKey(Truck_Set, null= True, on_delete=models.CASCADE)
     wharehouse_id = models.CharField(max_length=100)
     wharehouse_x = models.CharField(max_length=30)
