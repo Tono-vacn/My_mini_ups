@@ -48,6 +48,21 @@ def user_login(request):
       messages.info(request, 'invalid login')
   return render(request, 'login.html')
 
+def user_logout(request):
+  logout(request)
+  return redirect('user_login')
+
+def change_email(request):
+  email_form = ChangeEmailForm(request.POST or None)
+  if email_form.is_valid():
+    cur_user = request.user
+    cur_user.email = email_form.cleaned_data['email']
+    cur_user.save()
+    return redirect('show_index_page')
+  else:
+    messages.info(request, 'Invalid form')
+  return render(request, 'change_email.html', {'form': email_form})
+  
 
 def check_package(request):
   pkg_id = request.POST.get('package_id')
@@ -59,7 +74,3 @@ def check_all_packages(request):
   cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
   cur_packages = Package_tmp.objects.filter(pkg_user_id = cur_acc.id)
   return render(request, 'package.html', {'packages': cur_packages})
-
-def user_logout(request):
-  logout(request)
-  return redirect('user_login')

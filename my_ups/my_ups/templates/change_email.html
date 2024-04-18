@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Change Email{% endblock %}
+{% block email_active %}active{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <div style= "margin-top:200px;margin-right:100px;margin-left: 500px">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3 align="center">Edit your email address</h3>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+    <div class = "form-group">
+       <div class = "col-sm-offset-10 col-sm-10">
+           <span class = "text-danger small">{{ field.errors }}</span>
+       </div>
+       <label class="control-label col-sm-2">{{ field.label_tag }}</label>
+       <div class = "col-sm-offset-6">{{ field }}</div>
+    </div>
+{% endfor %}
+                        <div class="form-group">                                  
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
