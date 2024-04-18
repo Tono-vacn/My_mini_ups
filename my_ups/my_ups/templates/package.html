@@ -1,0 +1,97 @@
+{% extends 'myUPS/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Your packages
+{% endblock %}
+
+{% block body %}
+    
+    {% if pkgs %}
+    <h1 align = "center">
+      {% comment %} <img src="{% static 'myUPS/image/packages.png' %}"height="50" width="50"> {% endcomment %}
+      Your package's detail</h1>
+        {% if user.is_authenticated  %}
+    {% comment %} <a href="{% url 'loading'%}">
+    <button  class="btn btn-success" name = "pickup" value="pickup"><span class="glyphicon glyphicon-th-list"></span>&nbsp; wait for pickup</button>
+    </a>
+    <a href="{% url 'out'%}">
+    <button  class="btn btn-success" name = "loaded" value="loaded"><span class="glyphicon glyphicon-th-list"></span>&nbsp; out for delivery</button>
+    </a>
+    <a href="{% url 'arrive'%}">
+    <button  class="btn btn-success" name = "out" value="out"><span class="glyphicon glyphicon-th-list"></span>&nbsp; arrived</button>
+    </a> {% endcomment %}
+    {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <center><p{% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p></center>
+        {% endfor %}
+    {% endif %}
+    {% comment %} <form action="{% url 'edit_dest' %}"> {% endcomment %}
+    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'myUPS/table.css' %}"> {% endcomment %}
+    <table border="3" width="1300px" height="80px" cellpadding="20px" cellspacing="100px" align = "center" style = "background-color: aliceblue">
+        
+        <thead>
+        <tr>
+            <th><center><font size="2" color="white">package id</font></center></th>
+            <th><center><font size="2" color="white">warehouse id</font></center></th>
+            <th><center><font size="2" color="white">warehose spot</font></center></th>
+            <th><center><font size="2" color="white">destination</font></center></th>
+            <th><center><font size="2" color="white">package status</font></center></th>
+            <th><center><font size="2" color="white">pickup time</font></center></th>
+            <th><center><font size="2" color="white">load time</font></center></th>
+            <th><center><font size="2" color="white">deliver time</font></center></th><!--check if need to add sharer's destination-->
+            <th><center><font size="2" color="white">owner</font></center></th>
+            <th><center><font size="2" color="white">modify destination</font></center></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in packages %}
+            <tr>
+                <th><center>{{ p.pkg_id }}</center></th>
+                <th><center>{{ p.wharehouse_id }}</center></th>
+                <th><center>{{ p.wharehouse_x}} , {{p.wharehouse_y }}</center></th>
+                <th><center>{{ p.dst_x }} , {{p.dst_y }}</center></th>
+                <th><center>{{ p.pkg_status }}</center></th>
+                <th><center>{{ p.pkup_time }}</center></th>
+                <th><center>{{ p.ld_time }}</center></th>
+                <th><center>{{ p.del_time }}</center></th>
+                <th><center>{{ p.pkg_user.user.username }}</center></th>
+                <th>
+                    <center>
+                <label>
+                        <input type="radio" name="package_id" value="{{ p.package_id }}">
+                     </label>
+                    </center>
+                     </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        <center>
+        <button  class="btn btn-success" value="{{p.package_id}}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp; change destination</button>
+        </center>
+    </form>
+    {% else %}
+    {% if messages %}
+        {% for message in messages %}
+            <center><p{% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p></center>
+        {% endfor %}
+    {% endif %}
+    <center><h1>No Package Founded!</h1></center>
+    {% if user.is_authenticated  %}
+    <a href="{% url 'loading'%}">
+    <button  class="btn btn-success" name = "pickup" value="pickup"><span class="glyphicon glyphicon-th-list"></span>&nbsp; wait for pickup</button>
+    </a>
+    <a href="{% url 'out'%}">
+    <button  class="btn btn-success" name = "loaded" value="loaded"><span class="glyphicon glyphicon-th-list"></span>&nbsp; out for delivery</button>
+    </a>
+    <a href="{% url 'arrive'%}">
+    <button  class="btn btn-success" name = "out" value="out"><span class="glyphicon glyphicon-th-list"></span>&nbsp; arrived</button>
+    </a>
+    {% endif %}
+    {% endif %}
+    
+
+{% endblock %}

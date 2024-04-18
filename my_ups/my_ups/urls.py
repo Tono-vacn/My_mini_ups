@@ -23,4 +23,7 @@ urlpatterns = [
     path('',views.show_index_page, name='index'),
     path('register/', views.user_register, name='user_register'),
     path('login/', views.user_login, name='user_login'),
+    path('logout/', views.user_logout, name='user_logout'),
+    path('pkg/', views.check_package, name='pkg'),
+    path('pkg/<int:user.id>/', views.check_all_packages, name='pkg_all'),
 ]

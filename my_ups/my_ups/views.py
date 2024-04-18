@@ -50,5 +50,16 @@ def user_login(request):
 
 
 def check_package(request):
-  cur_acc = Account_tmp.objects.get(user_id = request.user.id)
+  pkg_id = request.POST.get('package_id')
+  package = Package_tmp.objects.get(pk = pkg_id)
+  return render(request, 'package.html', {'packages': package})
   
+def check_all_packages(request):
+  cur_user = request.user
+  cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
+  cur_packages = Package_tmp.objects.filter(pkg_user_id = cur_acc.id)
+  return render(request, 'package.html', {'packages': cur_packages})
+
+def user_logout(request):
+  logout(request)
+  return redirect('user_login')
