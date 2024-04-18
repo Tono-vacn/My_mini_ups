@@ -31,22 +31,22 @@ def user_register(request):
       pass
   else:
     ipt_form = RegForm()
-  return render(request, 'register.html', {'form': ipt_form})
+  return render(request, 'myups/register.html', {'form': ipt_form})
 
 def user_login(request):
   if request.user.is_authenticated:
-    return redirect('show_index_page')
+    return redirect('index')
   if request.method == 'POST':
     new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
     if new_user is not None and new_user.is_active:
       # if new_user.is_active:
       login(request, new_user)
-      return redirect('show_index_page')
+      return redirect('index')
       # else:
       #   messages.info(request, 'invalid login')
     else:
       messages.info(request, 'invalid login')
-  return render(request, 'login.html')
+  return render(request, 'myups/login.html')
 
 def user_logout(request):
   logout(request)
@@ -61,16 +61,16 @@ def change_email(request):
     return redirect('show_index_page')
   else:
     messages.info(request, 'Invalid form')
-  return render(request, 'change_email.html', {'form': email_form})
+  return render(request, 'myups/change_email.html', {'form': email_form})
   
 
 def check_package(request):
   pkg_id = request.POST.get('package_id')
   package = Package_tmp.objects.get(pk = pkg_id)
-  return render(request, 'package.html', {'packages': package})
+  return render(request, 'myups/package.html', {'packages': package})
   
 def check_all_packages(request):
   cur_user = request.user
   cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
   cur_packages = Package_tmp.objects.filter(pkg_user_id = cur_acc.id)
-  return render(request, 'package.html', {'packages': cur_packages})
+  return render(request, 'myups/package.html', {'packages': cur_packages})
