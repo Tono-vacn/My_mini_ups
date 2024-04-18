@@ -12,7 +12,7 @@
                   {% for message in messages %}
                   <p{% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p>
                   {% endfor %}{% endif %}
-                  {% comment %} <form class="form-horizontal" role="form" action="{% url 'track_pkg' %}" method="post" enctype="multipart/form-data"> {% endcomment %}
+                  <form class="form-horizontal" role="form" action="{% url 'pkg' %}" method="post" enctype="multipart/form-data">
                       {% csrf_token %}
                       <div class="form-group">
                           <div class="col-sm-offset-3">

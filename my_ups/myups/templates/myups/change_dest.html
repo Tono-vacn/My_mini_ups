@@ -18,7 +18,7 @@
       {% endfor %}
       {% endif %}
 
-      <form class="form-horizontal" role="form" action="{% url 'save_dest' %}" method="post" enctype="multipart/form-data">
+      <form class="form-horizontal" role="form" action="{% url 'save_new_dest' %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="form-group">
               <label class="control-label col-sm-2" for="dest_x">

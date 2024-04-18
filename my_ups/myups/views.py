@@ -80,17 +80,46 @@ def check_all_packages(request, user_id):
   cur_packages = Package_tmp.objects.filter(pkg_user_id = cur_acc.id)
   return render(request, 'myups/package.html', {'packages': cur_packages})
 
-def change_dest(request):
-  # if request.method == 'POST':
-  #   package_id = request.POST.get('package_id')
-  #   if package_id is None:
-  #     messages.warning(request, 'Please enter a package id')
-  #     return redirect('index')
-  #   cur_pack = Package_tmp.objects.get(pk = package_id)
-  #   if not request.user.is_active or not request.user.is_authenticated or not cur_pack.pkg_user or not request.user == cur_pack.pkg_user.user:
-  #     messages.warning(request, 'You do not have permission to change this package, Please log as owner')
-  #     return redirect('user_login')
-  #   if cur_pack.pkg_status != 'T':
-  #     messages.warning(request, 'This package is not in the state to change destination.')    
-  # return render(request, 'myups/change_dest.html', {'package':
-  pass
+def change_dest(request, pkg_id):
+  cur_pack = Package_tmp.objects.get(pk = pkg_id)
+  if not request.user.is_active or not request.user.is_authenticated or not cur_pack.pkg_user or not request.user == cur_pack.pkg_user.user:
+    messages.warning(request, 'You do not have permission to change this package, Please log as owner')
+    return redirect('user_login')
+  if cur_pack.pkg_status != 'T':
+    messages.warning(request, 'This package is not in the state to change destination.')
+    return redirect('pkg_all', user_id = request.user.id)    
+  return render(request, 'myups/change_dest.html', {'package': Package_tmp.objects.get(pk = pkg_id)})
+
+@transaction.atomic
+def save_new_dest(request):
+  pkg_id = request.POST.get('package_id','')
+  new_x = request.POST.get('destination_x','')
+  new_y = request.POST.get('destination_y','')
+  p = Package_tmp.objects.get(pk = pkg_id)
+  p.dst_x = str(new_x)
+  p.dst_y = str(new_y)
+  p.save()
+  return redirect('pkg_all', user_id = request.user.id)
+
+def pkup_pkg(request):
+  cur_user = request.user
+  cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
+  return render(request, 'myups/package.html', {'packages': Package_tmp.objects.filter(pkg_user_id = cur_acc.id, pkg_status = 'T')})
+
+def load_pkg(request):
+  cur_user = request.user
+  cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
+  return render(request, 'myups/package.html', {'packages': Package_tmp.objects.filter(pkg_user_id = cur_acc.id, pkg_status = 'LED')})
+
+def deliver_pkg(request):
+  cur_user = request.user
+  cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
+  return render(request, 'myups/package.html', {'packages': Package_tmp.objects.filter(pkg_user_id = cur_acc.id, pkg_status = 'DING')})
+
+def delivered_pkg(request):
+  cur_user = request.user
+  cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
+  return render(request, 'myups/package.html', {'packages': Package_tmp.objects.filter(pkg_user_id = cur_acc.id, pkg_status = 'DED')})
+
+
+  

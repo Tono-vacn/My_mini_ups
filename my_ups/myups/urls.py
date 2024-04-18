@@ -27,5 +27,11 @@ urlpatterns = [
     path('pkg/', views.check_package, name='pkg'),
     path('pkg/<int:user_id>/', views.check_all_packages, name='pkg_all'),
     path('change_email/', views.change_email, name='change_email'),
+    path('change_dest/<int:pkg_id>/', views.change_dest, name='change_dest'),
+    path('save_new_dest', views.save_new_dest, name='save_new_dest'),
+    path('load_pkg/', views.load_pkg, name='load_pkg'),
+    path('pkup_pkg/', views.pkup_pkg, name='pkup_pkg'),
+    path('delivered_pkg/', views.delivered_pkg, name='delivered_pkg'),
+    path('deliver_pkg/', views.deliver_pkg, name='deliver_pkg'),
     # url(r'^$',views.index),
 ]

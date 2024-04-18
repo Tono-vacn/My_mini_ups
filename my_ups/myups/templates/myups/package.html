@@ -13,15 +13,18 @@
       {% comment %} <img src="{% static 'myUPS/image/packages.png' %}"height="50" width="50"> {% endcomment %}
       Your package's detail</h1>
         {% if user.is_authenticated  %}
-    {% comment %} <a href="{% url 'loading'%}">
+    <a href="{% url 'load_pkg'%}">
+        <button  class="btn btn-success" name = "loaded" value="loaded"><span class="glyphicon glyphicon-th-list"></span>&nbsp; loaded</button>
+    </a>
+    <a href="{% url 'pkup_pkg'%}">
     <button  class="btn btn-success" name = "pickup" value="pickup"><span class="glyphicon glyphicon-th-list"></span>&nbsp; wait for pickup</button>
     </a>
-    <a href="{% url 'out'%}">
-    <button  class="btn btn-success" name = "loaded" value="loaded"><span class="glyphicon glyphicon-th-list"></span>&nbsp; out for delivery</button>
+    <a href="{% url 'deliver_pkg'%}">
+    <button  class="btn btn-success" name = "deliver" value="deliver"><span class="glyphicon glyphicon-th-list"></span>&nbsp; out for delivery</button>
     </a>
-    <a href="{% url 'arrive'%}">
-    <button  class="btn btn-success" name = "out" value="out"><span class="glyphicon glyphicon-th-list"></span>&nbsp; arrived</button>
-    </a> {% endcomment %}
+    <a href="{% url 'delivered_pkg'%}">
+    <button  class="btn btn-success" name = "delivered" value="delivered"><span class="glyphicon glyphicon-th-list"></span>&nbsp; arrived</button>
+    </a>
     {% endif %}
     {% if messages %}
         {% for message in messages %}
@@ -60,18 +63,19 @@
                 <th><center>{{ p.pkg_user.user.username }}</center></th>
                 <th>
                     <center>
-                <label>
-                        <input type="radio" name="package_id" value="{{ p.package_id }}">
-                     </label>
+                    <a href="{% url 'change_dest' pkg_id=p.pkg_id %}">
+                {% comment %} <label>
+                        <input type="radio" name="package_id" value="{{ p.pkg_id }}">
+                     </label> {% endcomment %}
                     </center>
                      </th>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-        <center>
-        <button  class="btn btn-success" value="{{p.package_id}}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp; change destination</button>
-        </center>
+        {% comment %} <center>
+        <button  class="btn btn-success" value="{{p.pkg_id}}"><span class="glyphicon glyphicon-asterisk"></span>&nbsp; change destination</button>
+        </center> {% endcomment %}
     </form>
     {% else %}
     {% if messages %}
