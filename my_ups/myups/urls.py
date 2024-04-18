@@ -26,5 +26,6 @@ urlpatterns = [
     path('logout/', views.user_logout, name='user_logout'),
     path('pkg/', views.check_package, name='pkg'),
     path('pkg/<int:user_id>/', views.check_all_packages, name='pkg_all'),
+    path('change_email/', views.change_email, name='change_email'),
     # url(r'^$',views.index),
 ]

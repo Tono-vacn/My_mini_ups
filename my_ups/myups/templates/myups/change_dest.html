@@ -1,0 +1,49 @@
+{% extends 'myups/base.html' %}
+{% block title %}Change Destination{% endblock %}
+{% block change_destination %}active{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid" style= "margin-top:200px;margin-right:100px;margin-left: 500px;background-color: aliceblue;width: 500px">
+
+  <div class="panel-body col-sm-12">
+      <h1 align="center">Change Destination</h1>
+      {%if package%}
+      <h3>package id: {{package.pkg_id}}</h3>
+      {%endif%}
+
+      {% if messages %}
+      {% for message in messages %}
+      <p{% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+
+      <form class="form-horizontal" role="form" action="{% url 'save_dest' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+              <label class="control-label col-sm-2" for="dest_x">
+                  Destination: x coordinate
+              </label>
+              <div class="col-sm-offset-4" >
+                  <input id="destination_x" maxlength="30" name="destination_x" type="text">
+              </div>
+          </div>
+          <div class="form-group">
+              <label class="control-label col-sm-2" for="id_password">
+                  Destination: y coordinate
+              </label>
+              <div class="col-sm-offset-4">
+                  <input id="destination_y" maxlength="30" name="destination_y" type="test">
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="col-sm-offset-4 col-sm-10">
+                  <button type="submit" name="package_id" value="{{ package.pkg_id }}" class="btn btn-success">Confirm</button>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>
+
+
+{% endblock %}

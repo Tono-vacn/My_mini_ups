@@ -7,7 +7,7 @@
       <div class="col-sm-12 col-md-6">
           <div class="panel panel-default">
               <div class="panel-body">
-                  <h3 align="center">Enter your Package No. Here!</h3>
+                  <h3 align="center">Enter Package Number Here!</h3>
                   {% if messages %}
                   {% for message in messages %}
                   <p{% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p>
@@ -27,9 +27,11 @@
                       </div>
                   </form>
               </div>
+              {% if user.is_authenticated == False %}
               <div class="panel-footer">
                   Don't have an account? <a href="{% url 'user_register'%}">Click here</a > to register.
               </div>
+              {% endif %}
           </div>
       </div>
   </div>

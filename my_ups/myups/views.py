@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
 from .models import *
 from .forms_tmp import *
@@ -11,7 +12,7 @@ from .forms_tmp import *
 def show_index_page(request):
   return render(request, 'index.html')
 
-
+@transaction.atomic
 def user_register(request):
   if request.method == 'POST':
     ipt_form = RegForm(request.POST or None)
@@ -52,15 +53,19 @@ def user_logout(request):
   logout(request)
   return redirect('user_login')
 
+@transaction.atomic
 def change_email(request):
   email_form = ChangeEmailForm(request.POST or None)
-  if email_form.is_valid():
-    cur_user = request.user
-    cur_user.email = email_form.cleaned_data['email']
-    cur_user.save()
-    return redirect('show_index_page')
+  if request.method == 'POST':
+    if email_form.is_valid():
+      cur_user = request.user
+      cur_user.email = email_form.cleaned_data['email']
+      cur_user.save()
+      return redirect('index')
+    else:
+      messages.info(request, 'Invalid form')
   else:
-    messages.info(request, 'Invalid form')
+    email_form = ChangeEmailForm(instance=request.user)
   return render(request, 'myups/change_email.html', {'form': email_form})
   
 
@@ -69,8 +74,23 @@ def check_package(request):
   package = Package_tmp.objects.get(pk = pkg_id)
   return render(request, 'myups/package.html', {'packages': package})
   
-def check_all_packages(request):
+def check_all_packages(request, user_id):
   cur_user = request.user
   cur_acc = Account_tmp.objects.get(user_id = cur_user.id)
   cur_packages = Package_tmp.objects.filter(pkg_user_id = cur_acc.id)
   return render(request, 'myups/package.html', {'packages': cur_packages})
+
+def change_dest(request):
+  # if request.method == 'POST':
+  #   package_id = request.POST.get('package_id')
+  #   if package_id is None:
+  #     messages.warning(request, 'Please enter a package id')
+  #     return redirect('index')
+  #   cur_pack = Package_tmp.objects.get(pk = package_id)
+  #   if not request.user.is_active or not request.user.is_authenticated or not cur_pack.pkg_user or not request.user == cur_pack.pkg_user.user:
+  #     messages.warning(request, 'You do not have permission to change this package, Please log as owner')
+  #     return redirect('user_login')
+  #   if cur_pack.pkg_status != 'T':
+  #     messages.warning(request, 'This package is not in the state to change destination.')    
+  # return render(request, 'myups/change_dest.html', {'package':
+  pass
