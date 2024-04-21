@@ -1,0 +1,109 @@
+syntax = "proto2";
+message AUConnect {
+  	required int64 worldid = 1;
+	required int64 seqnum = 2;
+}
+
+message UAConnected {
+	required int64 worldid = 1;
+	required int64 ack =2;
+}
+
+message AUOrderDetail {
+required string ups_userid = 1; // amazon告诉ups userid，如果这个userid不对就在UA reponse返回error
+required int64 pd_id = 2;
+	required string pd_des = 3; // product description
+	required int64 quantity = 4;
+} 
+
+message AUCallTruck{
+	// required int64 whx = 1; // x coordinate of amz warehouse
+	// required int64 why = 2; // y coordinate of amz warehouse
+	required int64 destx = 13;// good’s destination
+	required int64 desty = 24;
+	required int64 whnum = 35;
+	required AUOrderDetail order = 4;
+	// required int64 seqnum = 6;
+}
+
+
+message UATruckArrive {
+	required int64 truckid = 1;
+	required int64 packageid = 2;
+	required int64 whnum = 3;
+// required int64 seqnum = 4;
+}
+
+message AUReadyToDeliver {
+	required int64 truckid = 1;
+	required int64 packageid = 2;
+// required int64 whx = 3; 
+	// required int64 why = 4;
+required int64 destx = 3; 
+	required int64 desty = 4;
+required int64 whnum =5;
+}
+
+message UADelivered {
+required int64 packageid = 1;		
+}	
+
+// message UAResponse {
+// 	required int64 packageid = 1;
+// 	required int64 truckid = 2;
+// 	required int64 ack = 3
+// }
+
+// message AUResponse {	
+// required int64 ack = 1;
+// }
+
+// message AUErr {
+//  	required string err = 1;
+//  	required int64 originseqnum = 2;
+//  	required int64 seqnum = 3;
+// }
+
+// message UAErr {
+//  	required string err = 1;
+//  	required int64 originseqnum = 2;
+//  	required int64 seqnum = 3;
+// }
+
+// message Command{
+//     required int64 type = 1;
+//     optional AUConnect = 2;
+//     optional AUCallTruck = 3; 
+//     optional UATruckArrive = 4;
+// }
+
+message AUCommand {
+ required int64 type = 1; // 0 for AUCallTruck, 1 for AUReadyToDeliver
+ optional AUCallTruck au_call_truck = 2;
+ optional AUReadyToDeliver au_ready_deliver = 3;
+ required int64 seqnum = 4;
+ optional string err = 5;
+}
+
+message UAResponse {
+ required int64 type = 1; // 0 for UATruckArrive, 1 for UADelivered
+ optional UATruckArrive ua_truck_arrive = 2;
+ optional UADelivered ua_delivered = 3;
+ required int64 ack = 4;
+ optional string err = 5;
+}
+
+
+
+// message UAResponse{
+//     required int64 packageid = 1;
+//     required int64 truckid = 2;
+//     optional string err = 3;
+//     required int64 ack= 4;
+// }
+
+// message AUResponse{
+//     required int64 packageid = 1;
+//     optional string err = 2;
+//     required int64 ack= 4;
+// }
