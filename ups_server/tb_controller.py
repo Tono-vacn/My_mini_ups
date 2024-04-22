@@ -133,7 +133,7 @@ def load_deliver_pkg(pkg_id, world_id):
   session = session_local()
   try:
     pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world == world_id).first()
-    pkg.pkg_status = "LED"
+    pkg.pkg_status = "DING"
     pkg.ld_time = time.ctime(time.time())
     session.commit()
   except Exception as e:

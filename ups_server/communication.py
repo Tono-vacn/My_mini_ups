@@ -35,6 +35,33 @@ def send_world_ack(ack, world_socket):
     world_ack(UCommands, ack)
     write_delimited_to(UCommands, world_socket)
 
+def gen_world_truck_pkup(truck_id, wh_id, seqnum):
+    UCommands = proto_world.UCommands()
+    pkup = UCommands.pickup.add()
+    pkup.truckid = truck_id
+    pkup.whid = wh_id
+    pkup.seqnum = seqnum
+    return UCommands
+
+def gen_world_truck_deliver(truck_id, seqnum, pkg_id, dst_x, dst_y):
+    UCommands = proto_world.UCommands()
+    deliver = UCommands.deliveries.add()
+    deliver.truckid = truck_id
+    pkg_pos = deliver.packages.add()
+    pkg_pos.packageid = pkg_id
+    pkg_pos.x = int(dst_x)
+    pkg_pos.y = int(dst_y)
+    deliver.seqnum = seqnum
+    return UCommands
+
+# send amazon message
+
+def gen_amazon_arrive(UACommands, whnum, truck_id, pack_id):
+    arrive = UACommands.ua_truck_arrive.add()
+    arrive.whnum = whnum
+    arrive.truckid = truck_id
+    arrive.packageid = pack_id
+    # return UACommands
 
 if __name__ == "__main__":
     import socket
