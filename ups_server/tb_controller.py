@@ -232,3 +232,14 @@ def get_pkg_time(pkg_id, world_id):
     print(f"An error occurred: {e}")
   finally:
     session.close()
+    
+    
+def get_pkg_whid(pkg_id, world_id):
+  session = session_local()
+  try:
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world == world_id).first()
+    return pkg.wharehouse_id if pkg != None else None
+  except Exception as e:
+    print(f"An error occurred: {e}")
+  finally:
+    session.close()

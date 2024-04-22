@@ -66,11 +66,13 @@ def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket):
     dstx = au_call_truck.destx
     dsty = au_call_truck.desty
     whid = au_call_truck.whnum
+    whx = au_call_truck.wh.whx
+    why = au_call_truck.wh.why
     acc = au_call_truck.order.ups_userid
     truck_id = get_truck(world_id)
     while truck_id == None:
         truck_id = get_truck(world_id)
-    init_pkg(pkg_id, acc, truck_id, whid, None, None, dstx, dsty, world_id)
+    init_pkg(pkg_id, acc, truck_id, whid, whx, why, dstx, dsty, world_id)
     UCommand = gen_world_truck_pkup(truck_id, whid, cur_seq)
     modify_truck_status(truck_id, "T", None, None, world_id)
     send_blk(UCommand, world_socket, cur_seq)
@@ -109,7 +111,7 @@ def deliver_complete(completion, world_id, world_socket):
     modify_truck_status(truck_id, "I", addr_x, addr_y, world_id)
     return
 
-def arrive_complete(completion, world_id, world_socket):
+def arrive_complete(completion, world_id, amazon_socket, world_socket):
     # get truck_id, wh_location, truck status
     # change truck status to "l"
     # send truck_arrived to Amazon
@@ -122,8 +124,10 @@ def arrive_complete(completion, world_id, world_socket):
     # print(UACommand)
     # find package id
     pack_id = get_single_pkg_to_pkup(truck_id, world_id, addr_x, addr_y)
-    gen_amazon_arrive(UACommand, wh_x, wh_y, truck_id, pack_id)
-    send_msg(UACommand, amazon_socket)
+    wh_id = get_pkg_whid(pack_id, world_id)
+    gen_amazon_arrive(UACommand, wh_id, truck_id, pack_id)
+    write_delimited_to(UACommand, amazon_socket)
+    # send_msg(UACommand, amazon_socket)
     # print("after send")
     return
 
@@ -134,6 +138,7 @@ def completion_handler(completion, world_id, amazon_socket, world_socket):
         print("enter arrive handler")
         arrive_complete(completion, world_id, amazon_socket, world_socket)
     return
+
 
 
     
