@@ -50,13 +50,13 @@ print("socket is listening")
 amazon_socket, addr = amazon.accept()
 print('Got connection from', addr)
 
-UACommands = ups_amazon_pb2.UACommands()
-UACommands.world_id = int(world_id)
-print(UACommands)
-send_msg(UACommands, amazon_socket)
+UAConnect = proto_amazon.AUConnect()
+UAConnect = parse_delimited_from(UAConnect, amazon_socket)
+connect_world_id = UAConnect.worldid
+connect_ack = UAConnect.seqnum
 
 # World initialization
-world_id = "1"
+world_id = str(connect_world_id)
 truck_num = 50
 pos_x = 0
 pos_y = 0
@@ -68,18 +68,17 @@ while True:
     try:
         if world_exist:
             construct_world(UConnect,  world_id, 0, pos_x, pos_y, 0)
-            print("successfully massed up")
         else:
-            print("successfully fucked up")
-            truck = find_truck_id()
+            truck = get_max_truck()
             max_id = 1
             if truck != None:
                 max_id = truck + 1
-            build_world(UConnect, None, truck_num, pos_x, pos_y, max_id)
-        send_msg(UConnect, world_socket)
+            construct_world(UConnect, world_id, truck_num, pos_x, pos_y, max_id)
+        write_delimited_to(UConnect, world_socket)
         # print(UConnect.worldid)
         # print(UConnect.isAmazon)
-        UConnected = recv_connected(world_socket)
+        UConnected = proto_world.UConnected()
+        UConnected = parse_delimited_from(UConnected, world_socket)
         print(UConnected.worldid)
         print(UConnected.result)
         if UConnected.result != "connected!":
@@ -90,22 +89,17 @@ while True:
         print(e)
         continue
 if not world_exist:
-    init_world(world_id, True)
-    init_trucks(pos_x, pos_y, truck_num, world_id)
-change_world(world_id)
-UCommandspeed = ups_world_pb2.UCommands()
+    create_world(world_id, True)
+    start_trucks(world_id, pos_x, pos_y, truck_num)
+switch_world(world_id)
+UCommandspeed = proto_world.UCommands()
 UCommandspeed.simspeed = 30000
-send_msg(UCommandspeed, world_socket)
+write_delimited_to(UCommandspeed, world_socket)
 
-# Uconnect = ups_world_pb2.UConnect()
-# build_world(Uconnect, world_id, truck_num, pos_x, pos_y, 1)
-# # initialize the trucks in database
-# # send_msg(UConnect, world_socket)
-# # UConnected = recv_connected(world_socket)
-# # print(UConnected.worldid)
-# # print(UConnected.result)
-# # change_world(world_id)
-
+UAConnected = proto_amazon.AUCommands()
+UAConnected.worldid = connect_world_id
+UAConnected.ack = connect_ack
+write_delimited_to(UAConnected, amazon_socket)
 # ----------------------------------------------------------------------------------
 # Step 4 : Start to handle Requests
 # ----------------------------------------------------------------------------------
