@@ -4,7 +4,9 @@ from google.protobuf.internal.decoder import _DecodeVarint32
 import protocol.world_ups_pb2 as proto_world
 import protocol.ups_amazon_pb2 as proto_amazon
 
+from message import *
 
+# Encode and decode messages
 def write_delimited_to(message, socket):
     serialized_message = message.SerializeToString()
     print(len(serialized_message))
@@ -26,6 +28,13 @@ def parse_delimited_from(message, socket):
     message.ParseFromString(serialized_message)
 
     return message
+
+# World specifics
+def send_world_ack(ack, world_socket):
+    UCommands = proto_world.UCommands()
+    world_ack(UCommands, ack)
+    write_delimited_to(UCommands, world_socket)
+
 
 if __name__ == "__main__":
     import socket

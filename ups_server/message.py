@@ -10,3 +10,6 @@ def construct_world(UConnect, world_id, truck_num, pos_x, pos_y, start_id):
     UConnect.isAmazon = False
     if world_id != None:
         UConnect.worldid = int(world_id)
+        
+def world_ack(UCommands, ack):
+    UCommands.acks.append(ack)
