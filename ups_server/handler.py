@@ -117,12 +117,12 @@ def arrive_complete(completion, world_id, world_socket):
     truck_id, addr_x, addr_y = get_truck_info(completion)
     modify_truck_status(truck_id, "L", addr_x, addr_y, world_id)
     # TODO: send truck_arrived to Amazon
-    UACommand = ups_amazon_pb2.UACommands()
+    UACommand = proto_amazon.UACommands()
     # print("when arrive at warehouse")
     # print(UACommand)
     # find package id
-    pack_id = req_package_to_pack(truck_id, wh_x, wh_y, world_id)
-    amazon_truck_arrive(UACommand, wh_x, wh_y, truck_id, pack_id)
+    pack_id = get_single_pkg_to_pkup(truck_id, world_id, addr_x, addr_y)
+    gen_amazon_arrive(UACommand, wh_x, wh_y, truck_id, pack_id)
     send_msg(UACommand, amazon_socket)
     # print("after send")
     return
