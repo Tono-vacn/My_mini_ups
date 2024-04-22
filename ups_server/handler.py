@@ -60,7 +60,7 @@ def send_email(email_addr, content):
 
 ### Handler for Amazon
 
-def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket):
+def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket, a_seq):
     cur_seq = generate_seqnum()
     pkg_id = au_call_truck.packageid
     dstx = au_call_truck.destx
@@ -78,7 +78,7 @@ def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket):
     send_blk(UCommand, world_socket, cur_seq)
     pass
 
-def ready_deliver_handler(au_ready_deliver, world_id, amazon_socket, world_socket):
+def ready_deliver_handler(au_ready_deliver, world_id, amazon_socket, world_socket, a_seq):
     cur_seq = generate_seqnum()
     truck_id = au_ready_deliver.truckid
     pkg_id = au_ready_deliver.packageid
@@ -177,10 +177,10 @@ def amazon_handler(world_id, amazon_socket, world_socket):
         print(AUCommands)
         print("recv finished")
         if AUCommands.HasField("au_call_truck"):
-            pool.submit(call_truck_handler, AUCommands.au_call_truck, world_id, amazon_socket, world_socket)
+            pool.submit(call_truck_handler, AUCommands.au_call_truck, world_id, amazon_socket, world_socket, AUCommands.seqnum)
             pass
         if AUCommands.HasField("au_ready_deliver"):
-            pool.submit(ready_deliver_handler, AUCommands.au_ready_deliver, world_id, amazon_socket, world_socket)
+            pool.submit(ready_deliver_handler, AUCommands.au_ready_deliver, world_id, amazon_socket, world_socket, AUCommands.seqnum)
             pass
         if AUCommands.HasField("err"):
             pool.submit(err_handler, AUCommands.err, "amazon")

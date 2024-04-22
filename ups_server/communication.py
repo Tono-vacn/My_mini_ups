@@ -43,6 +43,26 @@ def gen_world_truck_pkup(truck_id, wh_id, seqnum):
     pkup.seqnum = seqnum
     return UCommands
 
+def gen_ua_truck_arrive(whnum, truck_id, pack_id, a_seq):
+    UAresponse = proto_amazon.UAResponse()
+    UAresponse.type = 0
+    UAresponse.ack = a_seq
+    truck_arrive = UAresponse.ua_truck_arrive.add()
+    truck_arrive.whnum = whnum
+    truck_arrive.truckid = truck_id
+    truck_arrive.packageid = pack_id
+    return UAresponse
+
+def gen_ua_delivered(pack_id, a_seq):
+    UAresponse = proto_amazon.UAResponse()
+    UAresponse.type = 1
+    UAresponse.ack = a_seq
+    delivered = UAresponse.ua_delivered.add()
+    delivered.packageid = pack_id
+    return UAresponse
+    
+    
+
 def gen_world_truck_deliver(truck_id, seqnum, pkg_id, dst_x, dst_y):
     UCommands = proto_world.UCommands()
     deliver = UCommands.deliveries.add()
