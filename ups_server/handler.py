@@ -47,8 +47,8 @@ def send_blk(msg, socket, cur_seq):
 def send_email(email_addr, content):
     host = "smtp.gmail.com"
     port = 587
-    From = "DukeUpsOfficial@gmail.com"
-    pwd = "UpsOfficial+1s"
+    From = "sadcardation@gmail.com"
+    pwd = "slwfyvkmxgxaqgjs"
     s = smtplib.SMTP(host, port)
     s.starttls()
     s.login(From, pwd)
@@ -146,12 +146,9 @@ def delivery_made_handler(deliver, world_id, amazon_socket, world_socket):
     send_world_ack(world_socket, deliver.seqnum)
     truck_id = deliver.truckid
     package_id = deliver.packageid
-    print(type(package_id))
-    print(package_id)
     deliver_done_pkg(package_id, world_id)
-    UACommand = ups_amazon_pb2.UACommands()
-    amazon_delivered(UACommand, package_id)
-    print(UACommand)
+    # TODO
+    UAresponse = gen_ua_delivered()
     send_msg(UACommand, amazon_socket)
     To = req_email(package_id, world_id)
     if To != None:
