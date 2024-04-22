@@ -72,7 +72,7 @@ def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket, a_s
     truck_id = get_truck(world_id)
     while truck_id == None:
         truck_id = get_truck(world_id)
-    init_pkg(pkg_id, acc, truck_id, whid, whx, why, dstx, dsty, world_id)
+    init_pkg(pkg_id, acc, truck_id, whid, whx, why, dstx, dsty, world_id, a_seq)
     UCommand = gen_world_truck_pkup(truck_id, whid, cur_seq)
     modify_truck_status(truck_id, "T", None, None, world_id)
     send_blk(UCommand, world_socket, cur_seq)
@@ -94,7 +94,7 @@ def ready_deliver_handler(au_ready_deliver, world_id, amazon_socket, world_socke
     # modify the package status
     
     UCommand = gen_world_truck_deliver(truck_id, cur_seq, pkg_id, dstx, dsty)
-    modify_truck_status(truck_id, "D", None, None, world_id)
+    modify_truck_status(truck_id, "D", None, None, world_id, a_seq)
     load_deliver_pkg(pkg_id, world_id)
     email_addr = get_pkg_email(pkg_id, world_id)
     send_email(email_addr, "Your package is on the way") if email_addr!=None else None
