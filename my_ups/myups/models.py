@@ -17,6 +17,7 @@ class Truck_Set(models.Model):
     pos_x = models.CharField(max_length=30)
     pos_y = models.CharField(max_length=30)
     truck_world = models.ForeignKey(World, on_delete=models.CASCADE)
+    a_seq = models.IntegerField(null=True)#for delivery request
     
 class Package_tmp(models.Model):
     pkg_id = models.CharField(max_length=100, primary_key=True)
@@ -33,4 +34,5 @@ class Package_tmp(models.Model):
     ld_time = models.CharField(max_length=30)
     del_time = models.CharField(max_length=30)
     world = models.ForeignKey(World, on_delete=models.CASCADE)
+    a_seq = models.IntegerField(null=True)# for call truck request
     

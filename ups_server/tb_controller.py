@@ -90,13 +90,14 @@ def start_trucks(world_id, pos_x, pos_y, truck_num):
     session.close()
   pass
 
-def modify_truck_status(truck_id, status, pos_x, pos_y, world_id):
+def modify_truck_status(truck_id, status, pos_x, pos_y, world_id, a_seq):
   session = session_local()
   try:
     truck = session.query(Truck).filter(Truck.truck_id == truck_id and Truck.truck_world == world_id).first()
     truck.truck_status = status
     truck.pos_x = pos_x if pos_x != None else truck.pos_x
     truck.pos_y = pos_y if pos_y != None else truck.pos_y
+    truck.a_seq = a_seq if a_seq != None else truck.a_seq
     # truck.truck_world
     session.commit()
   except Exception as e:
@@ -106,7 +107,7 @@ def modify_truck_status(truck_id, status, pos_x, pos_y, world_id):
     session.close()
   pass
 
-def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_id):
+def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_id, a_seq):
   session = session_local()
   try:
     pkg = Package()
@@ -121,6 +122,7 @@ def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_i
     pkg.pkg_status = "T"
     pkg.pkup_time = time.ctime(time.time())
     pkg.world = world_id
+    pkg.a_seq = a_seq
     session.add(pkg)
     session.commit()
   except Exception as e:
@@ -239,6 +241,26 @@ def get_pkg_whid(pkg_id, world_id):
   try:
     pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world == world_id).first()
     return pkg.wharehouse_id if pkg != None else None
+  except Exception as e:
+    print(f"An error occurred: {e}")
+  finally:
+    session.close()
+    
+def get_seqnum_call_truck(pkg_id, world_id):
+  session = session_local()
+  try:
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world == world_id).first()
+    return pkg.a_seq if pkg != None else None
+  except Exception as e:
+    print(f"An error occurred: {e}")
+  finally:
+    session.close()
+    
+def get_seqnum_deliver(truck_id, world_id):
+  session = session_local()
+  try:
+    truck = session.query(Truck).filter(Truck.truck_id == truck_id and Truck.truck_world == world_id).first()
+    return truck.a_seq if truck != None else None
   except Exception as e:
     print(f"An error occurred: {e}")
   finally:
