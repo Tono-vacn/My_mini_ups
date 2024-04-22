@@ -53,12 +53,14 @@ def gen_ua_truck_arrive(whnum, truck_id, pack_id, a_seq):
     truck_arrive.packageid = pack_id
     return UAresponse
 
-def gen_ua_delivered(pack_id, a_seq):
+def gen_ua_delivered(pack_id, dest_x, dest_y, a_seq):
     UAresponse = proto_amazon.UAResponse()
     UAresponse.type = 1
     UAresponse.ack = a_seq
     delivered = UAresponse.ua_delivered.add()
     delivered.packageid = pack_id
+    delivered.destx = dest_x
+    delivered.desty = dest_y
     return UAresponse
     
     
