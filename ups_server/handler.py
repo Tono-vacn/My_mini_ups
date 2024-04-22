@@ -147,19 +147,29 @@ def delivery_made_handler(deliver, world_id, amazon_socket, world_socket):
     truck_id = deliver.truckid
     package_id = deliver.packageid
     deliver_done_pkg(package_id, world_id)
-    # TODO
-    UAresponse = gen_ua_delivered()
-    send_msg(UACommand, amazon_socket)
-    To = req_email(package_id, world_id)
-    if To != None:
-        msg = "Your package has been successfully delivered!\nEnjoy your time!"
-        send_email(To, msg)
+    _, dest_x, dest_y = get_pkg_truckid(package_id, world_id)
+    a_seq = get_seqnum_deliver(truck_id, world_id)
+    UAresponse = gen_ua_delivered(package_id, dest_x, dest_y, a_seq)
+    write_delimited_to(UAresponse, amazon_socket)
+    user_email = get_pkg_email(package_id, world_id)
+    if user_email != None:
+        msg = "Your package has been successfully delivered!\nThanks for choosing UPS service!"
+        send_email(user_email, msg)
+    return
+
+def query_handler(truckstatus, world_id):
+    pass
+
+def ack_handler(acks_world):
+    global acks
+    for ack in acks_world:
+        acks.append(ack)
     return
 
 def world_handler(world_id, world_socket, amazon_socket):
     num_threads = 5
     pool = ThreadPoolExecutor(num_threads)
-    while 1:
+    while True:
         # set the number of threads as you want
         UResponse = proto_world.UResponses() 
         UResponse = parse_delimited_from(UResponse, world_socket)
@@ -171,13 +181,11 @@ def world_handler(world_id, world_socket, amazon_socket):
         for b in range(0, len(UResponse.delivered)):
             pool.submit(delivery_made_handler, UResponse.delivered[b], world_id, amazon_socket, world_socket)
         for c in range(0, len(UResponse.truckstatus)):
-            pool.submit(Query_Handler, UResponse.truckstatus[c], world_id)
+            pool.submit(query_handler, UResponse.truckstatus[c], world_id)
         if len(UResponse.acks):
-            pool.submit(Ack_Handler, UResponse.acks)
+            pool.submit(ack_handler, UResponse.acks)
         for d in range(0, len(UResponse.error)):
-            pool.submit(Error_Handler, UResponse.error[d], world_id)
-        if UResponse.HasField("finished"):
-            pool.submit(Disconnect_amazon, UResponse.finished, world_id)
+            pool.submit(err_handler, UResponse.error[d], str(world_id))
     return
 
 def amazon_handler(world_id, amazon_socket, world_socket):
@@ -185,7 +193,11 @@ def amazon_handler(world_id, amazon_socket, world_socket):
     pool = ThreadPoolExecutor(num_threads)
     while 1:
         AUCommands = proto_amazon.AUCommands()
-        AUCommands = parse_delimited_from(AUCommands, amazon_socket)
+        try:
+            AUCommands = parse_delimited_from(AUCommands, amazon_socket)
+        except Exception as e:
+            print("Amazon closed the connection, or some error occurred")
+            break
         print("recv from amazon")
         print(AUCommands)
         print("recv finished")

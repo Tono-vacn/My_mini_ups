@@ -5,15 +5,12 @@ import threading
 import time
 
 import protocol.world_ups_pb2 as proto_world
-# import ups_amazon_pb2
+import protocol.ups_amazon_pb2 as proto_amazons
 
 from message import *
 from communication import *
-# from ups_send_recv import *
-
-# from update_tables import *
-# from ups_handler import amazon_recver, world_recver
 from manage_db import *
+from handler import *
 
 world_host = "vcm-39267.vm.duke.edu"
 world_port = 12345
@@ -113,9 +110,9 @@ send_msg(UCommandspeed, world_socket)
 # Step 4 : Start to handle Requests
 # ----------------------------------------------------------------------------------
 # try:
-thread1 = threading.Thread(target=amazon_recver, name="amazon", args=(world_id, amazon_socket, world_socket,))
+thread1 = threading.Thread(target=amazon_handler, name="amazon", args=(world_id, amazon_socket, world_socket,))
 thread1.start()
-thread2 = threading.Thread(target=world_recver, name="world", args=(world_id, world_socket, amazon_socket,))
+thread2 = threading.Thread(target=world_handler, name="world", args=(world_id, world_socket, amazon_socket,))
 thread2.start()
 while 1:
     pass
