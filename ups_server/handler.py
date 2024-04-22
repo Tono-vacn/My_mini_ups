@@ -102,21 +102,21 @@ def ready_deliver_handler(au_ready_deliver, world_id, amazon_socket, world_socke
     pass
 
 ### Handler for world
-def get_truck_info(completion):
-    return completion.truckid, completion.x, completion.y
+def get_truck_info(finished):
+    return finished.truckid, finished.x, finished.y
 
-def deliver_complete(completion, world_id, world_socket):
-    send_world_ack(world_socket, completion.seqnum)
-    truck_id, addr_x, addr_y = get_truck_info(completion)
+def deliver_complete(finished, world_id, world_socket):
+    send_world_ack(world_socket, finished.seqnum)
+    truck_id, addr_x, addr_y = get_truck_info(finished)
     modify_truck_status(truck_id, "I", addr_x, addr_y, world_id)
     return
 
-def arrive_complete(completion, world_id, amazon_socket, world_socket):
+def arrive_complete(finished, world_id, amazon_socket, world_socket):
     # get truck_id, wh_location, truck status
     # change truck status to "l"
     # send truck_arrived to Amazon
-    send_world_ack(world_socket, completion.seqnum)
-    truck_id, addr_x, addr_y = get_truck_info(completion)
+    send_world_ack(world_socket, finished.seqnum)
+    truck_id, addr_x, addr_y = get_truck_info(finished)
     modify_truck_status(truck_id, "L", addr_x, addr_y, world_id)
     # TODO: send truck_arrived to Amazon
     UACommand = proto_amazon.UACommands()
@@ -131,17 +131,33 @@ def arrive_complete(completion, world_id, amazon_socket, world_socket):
     # print("after send")
     return
 
-def completion_handler(completion, world_id, amazon_socket, world_socket):
-    if completion.status == "IDLE":
-        deliver_complete(completion, world_id, world_socket)
+def finished_handler(finished, world_id, amazon_socket, world_socket):
+    if finished.status == "IDLE":
+        deliver_complete(finished, world_id, world_socket)
     else:
         print("enter arrive handler")
-        arrive_complete(completion, world_id, amazon_socket, world_socket)
+        arrive_complete(finished, world_id, amazon_socket, world_socket)
     return
 
-
-
-    
+def delivery_made_handler(deliver, world_id, amazon_socket, world_socket):
+    # get truck_id, package_id
+    # change the package status to "d"
+    # send delivered to Amazon
+    send_world_ack(world_socket, deliver.seqnum)
+    truck_id = deliver.truckid
+    package_id = deliver.packageid
+    print(type(package_id))
+    print(package_id)
+    deliver_done_pkg(package_id, world_id)
+    UACommand = ups_amazon_pb2.UACommands()
+    amazon_delivered(UACommand, package_id)
+    print(UACommand)
+    send_msg(UACommand, amazon_socket)
+    To = req_email(package_id, world_id)
+    if To != None:
+        msg = "Your package has been successfully delivered!\nEnjoy your time!"
+        send_email(To, msg)
+    return
 
 def world_handler(world_id, world_socket, amazon_socket):
     num_threads = 5
@@ -154,9 +170,9 @@ def world_handler(world_id, world_socket, amazon_socket):
         print(UResponse)
         print("recv finished")
         for a in range(0, len(UResponse.completions)):
-            pool.submit(completion_handler, UResponse.completions[a], world_id, amazon_socket, world_socket)
+            pool.submit(finished_handler, UResponse.completions[a], world_id, amazon_socket, world_socket)
         for b in range(0, len(UResponse.delivered)):
-            pool.submit(Deliver_Handler, UResponse.delivered[b], world_id, amazon_socket, world_socket)
+            pool.submit(delivery_made_handler, UResponse.delivered[b], world_id, amazon_socket, world_socket)
         for c in range(0, len(UResponse.truckstatus)):
             pool.submit(Query_Handler, UResponse.truckstatus[c], world_id)
         if len(UResponse.acks):

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto2',
   serialized_options=None,
-  serialized_pb=_b('\n\x10ups_amazon.proto\",\n\tAUConnect\x12\x0f\n\x07worldid\x18\x01 \x02(\x03\x12\x0e\n\x06seqnum\x18\x02 \x02(\x03\"+\n\x0bUAConnected\x12\x0f\n\x07worldid\x18\x01 \x02(\x03\x12\x0b\n\x03\x61\x63k\x18\x02 \x02(\x03\"T\n\rAUOrderDetail\x12\x12\n\nups_userid\x18\x01 \x02(\t\x12\r\n\x05pd_id\x18\x02 \x02(\x03\x12\x0e\n\x06pd_des\x18\x03 \x02(\t\x12\x10\n\x08quantity\x18\x04 \x02(\x03\"l\n\x0b\x41UCallTruck\x12\x11\n\tpackageid\x18\x01 \x02(\x03\x12\r\n\x05\x64\x65stx\x18\x02 \x02(\x03\x12\r\n\x05\x64\x65sty\x18\x03 \x02(\x03\x12\r\n\x05whnum\x18\x04 \x02(\x03\x12\x1d\n\x05order\x18\x05 \x02(\x0b\x32\x0e.AUOrderDetail\"B\n\rUATruckArrive\x12\x0f\n\x07truckid\x18\x01 \x02(\x05\x12\x11\n\tpackageid\x18\x02 \x02(\x03\x12\r\n\x05whnum\x18\x03 \x02(\x03\"c\n\x10\x41UReadyToDeliver\x12\x0f\n\x07truckid\x18\x01 \x02(\x05\x12\x11\n\tpackageid\x18\x02 \x02(\x03\x12\r\n\x05\x64\x65stx\x18\x03 \x02(\x03\x12\r\n\x05\x64\x65sty\x18\x04 \x02(\x03\x12\r\n\x05whnum\x18\x05 \x02(\x03\" \n\x0bUADelivered\x12\x11\n\tpackageid\x18\x01 \x02(\x03\"\x88\x01\n\tAUCommand\x12\x0c\n\x04type\x18\x01 \x02(\x03\x12#\n\rau_call_truck\x18\x02 \x01(\x0b\x32\x0c.AUCallTruck\x12+\n\x10\x61u_ready_deliver\x18\x03 \x01(\x0b\x32\x11.AUReadyToDeliver\x12\x0e\n\x06seqnum\x18\x04 \x02(\x03\x12\x0b\n\x03\x65rr\x18\x05 \x01(\t\"\x81\x01\n\nUAResponse\x12\x0c\n\x04type\x18\x01 \x02(\x03\x12\'\n\x0fua_truck_arrive\x18\x02 \x01(\x0b\x32\x0e.UATruckArrive\x12\"\n\x0cua_delivered\x18\x03 \x01(\x0b\x32\x0c.UADelivered\x12\x0b\n\x03\x61\x63k\x18\x04 \x02(\x03\x12\x0b\n\x03\x65rr\x18\x05 \x01(\t')
+  serialized_pb=_b('\n\x10ups_amazon.proto\",\n\tAUConnect\x12\x0f\n\x07worldid\x18\x01 \x02(\x03\x12\x0e\n\x06seqnum\x18\x02 \x02(\x03\"+\n\x0bUAConnected\x12\x0f\n\x07worldid\x18\x01 \x02(\x03\x12\x0b\n\x03\x61\x63k\x18\x02 \x02(\x03\"T\n\rAUOrderDetail\x12\x12\n\nups_userid\x18\x01 \x02(\t\x12\r\n\x05pd_id\x18\x02 \x02(\x03\x12\x0e\n\x06pd_des\x18\x03 \x02(\t\x12\x10\n\x08quantity\x18\x04 \x02(\x05\":\n\x0f\x41UWarehouseInfo\x12\r\n\x05whnum\x18\x01 \x02(\x05\x12\x0b\n\x03whx\x18\x02 \x02(\x05\x12\x0b\n\x03why\x18\x03 \x02(\x05\"{\n\x0b\x41UCallTruck\x12\x11\n\tpackageid\x18\x01 \x02(\x03\x12\r\n\x05\x64\x65stx\x18\x02 \x02(\x05\x12\r\n\x05\x64\x65sty\x18\x03 \x02(\x05\x12\x1c\n\x02wh\x18\x04 \x02(\x0b\x32\x10.AUWarehouseInfo\x12\x1d\n\x05order\x18\x05 \x02(\x0b\x32\x0e.AUOrderDetail\"B\n\rUATruckArrive\x12\x0f\n\x07truckid\x18\x01 \x02(\x05\x12\x11\n\tpackageid\x18\x02 \x02(\x03\x12\r\n\x05whnum\x18\x03 \x02(\x05\"c\n\x10\x41UReadyToDeliver\x12\x0f\n\x07truckid\x18\x01 \x02(\x05\x12\x11\n\tpackageid\x18\x02 \x02(\x03\x12\r\n\x05\x64\x65stx\x18\x03 \x02(\x05\x12\r\n\x05\x64\x65sty\x18\x04 \x02(\x05\x12\r\n\x05whnum\x18\x05 \x02(\x05\">\n\x0bUADelivered\x12\x11\n\tpackageid\x18\x01 \x02(\x03\x12\r\n\x05\x64\x65stx\x18\x02 \x02(\x05\x12\r\n\x05\x64\x65sty\x18\x03 \x02(\x05\"\x88\x01\n\tAUCommand\x12\x0c\n\x04type\x18\x01 \x02(\x03\x12#\n\rau_call_truck\x18\x02 \x01(\x0b\x32\x0c.AUCallTruck\x12+\n\x10\x61u_ready_deliver\x18\x03 \x01(\x0b\x32\x11.AUReadyToDeliver\x12\x0e\n\x06seqnum\x18\x04 \x02(\x03\x12\x0b\n\x03\x65rr\x18\x05 \x01(\t\"\x81\x01\n\nUAResponse\x12\x0c\n\x04type\x18\x01 \x02(\x03\x12\'\n\x0fua_truck_arrive\x18\x02 \x01(\x0b\x32\x0e.UATruckArrive\x12\"\n\x0cua_delivered\x18\x03 \x01(\x0b\x32\x0c.UADelivered\x12\x0b\n\x03\x61\x63k\x18\x04 \x02(\x03\x12\x0b\n\x03\x65rr\x18\x05 \x01(\t')
 )
 
 
@@ -131,7 +131,7 @@ _AUORDERDETAIL = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='quantity', full_name='AUOrderDetail.quantity', index=3,
-      number=4, type=3, cpp_type=2, label=2,
+      number=4, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -153,6 +153,51 @@ _AUORDERDETAIL = _descriptor.Descriptor(
 )
 
 
+_AUWAREHOUSEINFO = _descriptor.Descriptor(
+  name='AUWarehouseInfo',
+  full_name='AUWarehouseInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='whnum', full_name='AUWarehouseInfo.whnum', index=0,
+      number=1, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='whx', full_name='AUWarehouseInfo.whx', index=1,
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='why', full_name='AUWarehouseInfo.why', index=2,
+      number=3, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=197,
+  serialized_end=255,
+)
+
+
 _AUCALLTRUCK = _descriptor.Descriptor(
   name='AUCallTruck',
   full_name='AUCallTruck',
@@ -169,22 +214,22 @@ _AUCALLTRUCK = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='destx', full_name='AUCallTruck.destx', index=1,
-      number=2, type=3, cpp_type=2, label=2,
+      number=2, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='desty', full_name='AUCallTruck.desty', index=2,
-      number=3, type=3, cpp_type=2, label=2,
+      number=3, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='whnum', full_name='AUCallTruck.whnum', index=3,
-      number=4, type=3, cpp_type=2, label=2,
-      has_default_value=False, default_value=0,
+      name='wh', full_name='AUCallTruck.wh', index=3,
+      number=4, type=11, cpp_type=10, label=2,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -207,8 +252,8 @@ _AUCALLTRUCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=197,
-  serialized_end=305,
+  serialized_start=257,
+  serialized_end=380,
 )
 
 
@@ -235,7 +280,7 @@ _UATRUCKARRIVE = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='whnum', full_name='UATruckArrive.whnum', index=2,
-      number=3, type=3, cpp_type=2, label=2,
+      number=3, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -252,8 +297,8 @@ _UATRUCKARRIVE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=307,
-  serialized_end=373,
+  serialized_start=382,
+  serialized_end=448,
 )
 
 
@@ -280,21 +325,21 @@ _AUREADYTODELIVER = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='destx', full_name='AUReadyToDeliver.destx', index=2,
-      number=3, type=3, cpp_type=2, label=2,
+      number=3, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='desty', full_name='AUReadyToDeliver.desty', index=3,
-      number=4, type=3, cpp_type=2, label=2,
+      number=4, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='whnum', full_name='AUReadyToDeliver.whnum', index=4,
-      number=5, type=3, cpp_type=2, label=2,
+      number=5, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -311,8 +356,8 @@ _AUREADYTODELIVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=375,
-  serialized_end=474,
+  serialized_start=450,
+  serialized_end=549,
 )
 
 
@@ -330,6 +375,20 @@ _UADELIVERED = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='destx', full_name='UADelivered.destx', index=1,
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='desty', full_name='UADelivered.desty', index=2,
+      number=3, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -342,8 +401,8 @@ _UADELIVERED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=476,
-  serialized_end=508,
+  serialized_start=551,
+  serialized_end=613,
 )
 
 
@@ -401,8 +460,8 @@ _AUCOMMAND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=511,
-  serialized_end=647,
+  serialized_start=616,
+  serialized_end=752,
 )
 
 
@@ -460,10 +519,11 @@ _UARESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=650,
-  serialized_end=779,
+  serialized_start=755,
+  serialized_end=884,
 )
 
+_AUCALLTRUCK.fields_by_name['wh'].message_type = _AUWAREHOUSEINFO
 _AUCALLTRUCK.fields_by_name['order'].message_type = _AUORDERDETAIL
 _AUCOMMAND.fields_by_name['au_call_truck'].message_type = _AUCALLTRUCK
 _AUCOMMAND.fields_by_name['au_ready_deliver'].message_type = _AUREADYTODELIVER
@@ -472,6 +532,7 @@ _UARESPONSE.fields_by_name['ua_delivered'].message_type = _UADELIVERED
 DESCRIPTOR.message_types_by_name['AUConnect'] = _AUCONNECT
 DESCRIPTOR.message_types_by_name['UAConnected'] = _UACONNECTED
 DESCRIPTOR.message_types_by_name['AUOrderDetail'] = _AUORDERDETAIL
+DESCRIPTOR.message_types_by_name['AUWarehouseInfo'] = _AUWAREHOUSEINFO
 DESCRIPTOR.message_types_by_name['AUCallTruck'] = _AUCALLTRUCK
 DESCRIPTOR.message_types_by_name['UATruckArrive'] = _UATRUCKARRIVE
 DESCRIPTOR.message_types_by_name['AUReadyToDeliver'] = _AUREADYTODELIVER
@@ -500,6 +561,13 @@ AUOrderDetail = _reflection.GeneratedProtocolMessageType('AUOrderDetail', (_mess
   # @@protoc_insertion_point(class_scope:AUOrderDetail)
   ))
 _sym_db.RegisterMessage(AUOrderDetail)
+
+AUWarehouseInfo = _reflection.GeneratedProtocolMessageType('AUWarehouseInfo', (_message.Message,), dict(
+  DESCRIPTOR = _AUWAREHOUSEINFO,
+  __module__ = 'ups_amazon_pb2'
+  # @@protoc_insertion_point(class_scope:AUWarehouseInfo)
+  ))
+_sym_db.RegisterMessage(AUWarehouseInfo)
 
 AUCallTruck = _reflection.GeneratedProtocolMessageType('AUCallTruck', (_message.Message,), dict(
   DESCRIPTOR = _AUCALLTRUCK,

@@ -13,34 +13,41 @@ message AUOrderDetail {
 	required string ups_userid = 1; // amazon告诉ups userid，如果这个userid不对就在UA reponse返回error
 	required int64 pd_id = 2;
 	required string pd_des = 3; // product description
-	required int64 quantity = 4;
-} 
+	required int32 quantity = 4;
+}
+
+message AUWarehouseInfo {
+	required int32 whnum = 1;
+	required int32 whx = 2;
+	required int32 why = 3;
+}
 
 message AUCallTruck{
 	required int64 packageid = 1;
-	required int64 destx = 2;// good’s destination
-	required int64 desty = 3;
-	required int64 whnum = 4;
+	required int32 destx = 2;// good’s destination
+	required int32 desty = 3;
+	required AUWarehouseInfo wh = 4;
 	required AUOrderDetail order = 5;
 }
-
 
 message UATruckArrive {
 	required int32 truckid = 1;
 	required int64 packageid = 2;
-	required int64 whnum = 3;
+	required int32 whnum = 3;
 }
 
 message AUReadyToDeliver {
 	required int32 truckid = 1;
 	required int64 packageid = 2;
-	required int64 destx = 3; 
-	required int64 desty = 4;
-	required int64 whnum =5;
+	required int32 destx = 3; 
+	required int32 desty = 4;
+	required int32 whnum =5;
 }
 
 message UADelivered {
-	required int64 packageid = 1;		
+	required int64 packageid = 1;
+	required int32 destx = 2;
+	required int32 desty = 3;
 }
 
 message AUCommand {
