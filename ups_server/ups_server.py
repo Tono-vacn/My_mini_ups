@@ -4,19 +4,20 @@ import socket
 import threading
 import time
 
-import ups_world_pb2
-import ups_amazon_pb2
+import protocol.world_ups_pb2 as proto_world
+# import ups_amazon_pb2
 
-from ups_build_msg import build_world
-from ups_send_recv import *
+from message import *
+from communication import *
+# from ups_send_recv import *
 
-from update_tables import *
-from ups_handler import amazon_recver, world_recver
+# from update_tables import *
+# from ups_handler import amazon_recver, world_recver
 from manage_db import *
 
 world_host = "vcm-39267.vm.duke.edu"
 world_port = 12345
-amazon_port = 8888
+amazon_port = 9000
 
 database_host = "127.0.0.1"
 database_port = 5432
@@ -38,6 +39,24 @@ while True:
         break
     finally:
         pass
+    
+# Connect to Amazon
+amazon = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+amazon.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+print("Socket successfully created")
+amazon.bind(('', amazon_port))
+print("socket binded to %s" %(amazon_port))
+
+amazon.listen(5)
+print("socket is listening")
+
+amazon_socket, addr = amazon.accept()
+print('Got connection from', addr)
+
+UACommands = ups_amazon_pb2.UACommands()
+UACommands.world_id = int(world_id)
+print(UACommands)
+send_msg(UACommands, amazon_socket)
 
 # World initialization
 world_id = "1"
@@ -46,11 +65,12 @@ pos_x = 0
 pos_y = 0
 
 world_exist = does_world_exist(world_id)
-UConnect = ups_world_pb2.UConnect()
-while 1:
+UConnect = proto_world.UConnect()
+
+while True:
     try:
         if world_exist:
-            build_world(UConnect,  world_id, 0, pos_x, pos_y, 0)
+            construct_world(UConnect,  world_id, 0, pos_x, pos_y, 0)
             print("successfully massed up")
         else:
             print("successfully fucked up")
@@ -88,26 +108,6 @@ send_msg(UCommandspeed, world_socket)
 # # print(UConnected.worldid)
 # # print(UConnected.result)
 # # change_world(world_id)
-
-# ----------------------------------------------------------------------------------
-# Step 3 : Connect to Amazon
-# ----------------------------------------------------------------------------------
-amazon = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-amazon.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-print("Socket successfully created")
-amazon.bind(('', amazon_port))
-print("socket binded to %s" %(amazon_port))
-
-amazon.listen(5)
-print("socket is listening")
-
-amazon_socket, addr = amazon.accept()
-print('Got connection from', addr)
-
-UACommands = ups_amazon_pb2.UACommands()
-UACommands.world_id = int(world_id)
-print(UACommands)
-send_msg(UACommands, amazon_socket)
 
 # ----------------------------------------------------------------------------------
 # Step 4 : Start to handle Requests
