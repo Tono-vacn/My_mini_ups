@@ -119,10 +119,8 @@ def arrive_complete(finished, world_id, amazon_socket, world_socket):
     send_world_ack(world_socket, finished.seqnum)
     truck_id, addr_x, addr_y = get_truck_info(finished)
     modify_truck_status(truck_id, "L", addr_x, addr_y, world_id)
-    # TODO: send truck_arrived to Amazon
     pack_id = get_single_pkg_to_pkup(truck_id, world_id, addr_x, addr_y)
     wh_id = get_pkg_whid(pack_id, world_id)
-    # gen_amazon_arrive(UACommand, wh_id, truck_id, pack_id)
     Uaresponse = gen_ua_truck_arrive(wh_id, truck_id, pack_id, get_seqnum(pack_id, world_id))
     write_delimited_to(Uaresponse, amazon_socket)
     return
