@@ -82,14 +82,17 @@
     {% endif %}
     <center><h1>No Package Founded!</h1></center>
     {% if user.is_authenticated  %}
+    <a href="{% url 'load_pkg'%}">
+        <button  class="btn btn-success" name = "loaded" value="loaded"><span class="glyphicon glyphicon-th-list"></span>&nbsp; loaded</button>
+    </a>
     <a href="{% url 'pkup_pkg'%}">
     <button  class="btn btn-success" name = "pickup" value="pickup"><span class="glyphicon glyphicon-th-list"></span>&nbsp; wait for pickup</button>
     </a>
-    <a href="{% url 'load_pkg'%}">
-    <button  class="btn btn-success" name = "loaded" value="loaded"><span class="glyphicon glyphicon-th-list"></span>&nbsp; out for delivery</button>
+    <a href="{% url 'deliver_pkg'%}">
+    <button  class="btn btn-success" name = "deliver" value="deliver"><span class="glyphicon glyphicon-th-list"></span>&nbsp; out for delivery</button>
     </a>
     <a href="{% url 'delivered_pkg'%}">
-    <button  class="btn btn-success" name = "out" value="out"><span class="glyphicon glyphicon-th-list"></span>&nbsp; arrived</button>
+    <button  class="btn btn-success" name = "delivered" value="delivered"><span class="glyphicon glyphicon-th-list"></span>&nbsp; arrived</button>
     </a>
     {% endif %}
     {% endif %}
