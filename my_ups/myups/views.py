@@ -28,7 +28,7 @@ def user_register(request):
       new_acc.save()
       return redirect('user_login')
     else:
-      messages.info(request, 'Invalid form')
+      messages.error(request, 'Invalid form')
       pass
   else:
     ipt_form = RegForm()
@@ -46,7 +46,7 @@ def user_login(request):
       # else:
       #   messages.info(request, 'invalid login')
     else:
-      messages.info(request, 'invalid login')
+      messages.warning(request, 'invalid login')
   return render(request, 'myups/login.html')
 
 def user_logout(request):
@@ -63,7 +63,7 @@ def change_email(request):
       cur_user.save()
       return redirect('index')
     else:
-      messages.info(request, 'Invalid form')
+      messages.warning(request, 'Invalid form')
   else:
     email_form = ChangeEmailForm(instance=request.user)
   return render(request, 'myups/change_email.html', {'form': email_form})
@@ -75,7 +75,7 @@ def check_package(request):
     package = Package_tmp.objects.get(pk = pkg_id)
     return render(request, 'myups/package.html', {'packages': [package]})
   except Exception as e:
-    messages.info(request, 'Invalid package id'+str(e))
+    messages.error(request, 'Invalid package id')
     return redirect('index')
   
 def check_all_packages(request, user_id):

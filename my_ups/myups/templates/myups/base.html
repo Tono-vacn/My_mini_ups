@@ -6,10 +6,13 @@
     <title>{% block title %}UPS SERVICE{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+    <link href="{% static '/myups/style.css' %}" type='text/css' rel="stylesheet">
 </head>
 
 <body>
    <!-- Header -->
+   <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
    <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
         <span class="icon-bar"></span>
@@ -17,7 +20,7 @@
         <span class="icon-bar"></span>
     </button>
     <a class="navbar-brand" href="{% url 'index'%}" style="font-size: 30px">myUPS</a >
-</div>
+    </div>
 
 <!-- Items -->
 <div class="collapse navbar-collapse" id="topNavBar">
@@ -51,9 +54,13 @@
         <li class="{% block track_order %}{% endblock %}"><a href="{% url 'index'%}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Track package</a ></li>
     </ul>
 </div>
+</div>
+</nav>
 
+{% comment %} <div class="container"> {% endcomment %}
 {% block body %}
 {% endblock %}
+{% comment %} </div> {% endcomment %}
 
 </body>
 </html> 

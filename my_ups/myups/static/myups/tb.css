@@ -1,0 +1,70 @@
+
+.container-fluid {
+    margin-top: 20px;
+    padding: 15px;
+}
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 16px;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.btn-success {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 4px 2px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+}
+.btn-success:hover {
+    background-color: #45a049;
+}
+.center-text {
+    text-align: center;
+}
+/* 基础样式 */
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: #fff; /* 默认白色字体 */
+  text-align: center; /* 居中显示消息文本 */
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 轻微的阴影效果增加深度感 */
+}
+
+/* 成功消息 */
+.success {
+  background-color: #4CAF50; /* 鲜绿色背景表示成功 */
+}
+
+/* 错误消息 */
+.error {
+  background-color: #f44336; /* 深红色背景表示错误 */
+}
+
+/* 警告消息 */
+.warning {
+  background-color: #ff9800; /* 橙色背景表示警告 */
+}
+
+/* 信息消息 */
+.info {
+  background-color: #2196F3; /* 蓝色背景表示一般信息 */
+}

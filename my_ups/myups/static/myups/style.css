@@ -1,0 +1,59 @@
+body {
+  padding-top: 70px; /* 添加顶部空间，防止内容被导航栏遮挡 */
+  background-color: #f4f4f4; /* 设定背景颜色 */
+  width:100%;
+  height:100%;
+
+  /* font-family: 'Satisfy', cursive; 设置字体 */
+}
+.navbar-brand {
+  font-size: 35px; /* 增大品牌字体大小 */
+  /* font-family: 'Satisfy', cursive; 设置字体 */
+}
+.navbar-default {
+  background-color: #fff; /* 设置导航栏背景颜色 */
+  border-color: transparent; /* 移除边框 */
+  box-shadow: 0 2px 4px rgba(0,0,0,.1); /* 添加阴影效果 */
+}
+.nav > li > a {
+  font-size: 16px; /* 增大导航链接字体大小 */
+  color: #555; /* 设置字体颜色 */
+}
+.nav > li > a:hover, .nav > li > a:focus {
+  color: #4f9dd9; /* 设置鼠标悬停颜色 */
+}
+/* .container-fluid {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 20px;
+} */
+/* 基础样式 */
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: #fff; /* 默认白色字体 */
+  text-align: center; /* 居中显示消息文本 */
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 轻微的阴影效果增加深度感 */
+}
+
+/* 成功消息 */
+.success {
+  background-color: #4CAF50; /* 鲜绿色背景表示成功 */
+}
+
+/* 错误消息 */
+.error {
+  background-color: #f44336; /* 深红色背景表示错误 */
+}
+
+/* 警告消息 */
+.warning {
+  background-color: #ff9800; /* 橙色背景表示警告 */
+}
+
+/* 信息消息 */
+.info {
+  background-color: #2196F3; /* 蓝色背景表示一般信息 */
+}

@@ -1,6 +1,10 @@
 {% extends 'myups/base.html'%}
+{% load static %}
 {% block title %}Track Your Package{% endblock %}
 {% block body %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'myups/track.css' %}">
 
 <div class="container-fluid" style="margin-top:200px;margin-right:100px;margin-left: 500px">
   <div>
@@ -10,7 +14,7 @@
                   <h3 align="center">Enter Package Number Here!</h3>
                   {% if messages %}
                   {% for message in messages %}
-                  <p{% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p>
+                  <p{% if message.tags %} class="message {{ message.tags }}" {% endif %} style="padding: 10px">{{ message }}</p>
                   {% endfor %}{% endif %}
                   <form class="form-horizontal" role="form" action="{% url 'pkg' %}" method="post" enctype="multipart/form-data">
                       {% csrf_token %}

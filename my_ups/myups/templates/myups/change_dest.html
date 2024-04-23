@@ -1,10 +1,52 @@
 {% extends 'myups/base.html' %}
+{% load static %}
 {% block title %}Change Destination{% endblock %}
 {% block change_destination %}active{% endblock %}
 
 {% block body %}
+<link rel="stylesheet" type="text/css" href="{% static 'myups/dest.css' %}">
 
-<div class="container-fluid" style= "margin-top:200px;margin-right:100px;margin-left: 500px;background-color: aliceblue;width: 500px">
+<div class="container-fluid">
+    <div class="panel-body">
+        <h1 class="text-center">Change Destination</h1>
+        {% if package %}
+            <h3 class="text-center">Package ID: {{ package.pkg_id }}</h3>
+        {% endif %}
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <p{% if message.tags %} class="message {{ message.tags }}" {% endif %}>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form class="form-horizontal" role="form" action="{% url 'save_new_dest' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="destination_x">
+                    Destination: x coordinate
+                </label>
+                <div class="col-sm-8">
+                    <input id="destination_x" class="form-control" maxlength="30" name="destination_x" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="destination_y">
+                    Destination: y coordinate
+                </label>
+                <div class="col-sm-8">
+                    <input id="destination_y" class="form-control" maxlength="30" name="destination_y" type="text">
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <div class="col-sm-12">
+                    <button type="submit" name="package_id" value="{{ package.pkg_id }}" class="btn btn-success">Confirm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% comment %} <div class="container-fluid" style= "margin-top:200px;margin-right:100px;margin-left: 500px;background-color: aliceblue;width: 500px">
 
   <div class="panel-body col-sm-12">
       <h1 align="center">Change Destination</h1>
@@ -43,7 +85,7 @@
           </div>
       </form>
   </div>
-</div>
+</div> {% endcomment %}
 
 
 {% endblock %}

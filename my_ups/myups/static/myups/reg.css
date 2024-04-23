@@ -1,0 +1,58 @@
+.container_s {
+  margin: 100px auto;
+  max-width: 600px;
+  padding: 20px;
+}
+.panel {
+  background-color: #f8f8f8; /* 面板背景色 */
+  border: 1px solid #ddd; /* 轻微的边框 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 简单的阴影效果 */
+}
+.panel-body {
+  padding: 20px;
+}
+.form-group {
+  margin-bottom: 15px; /* 增加表单元素之间的间隔 */
+}
+.form-control {
+  width: 100%; /* 控制输入框宽度 */
+}
+.btn-success {
+  width: 100%; /* 按钮宽度全宽 */
+  padding: 10px; /* 按钮内部填充 */
+}
+.panel-footer {
+  padding: 10px;
+  background-color: #fff; /* 背景颜色 */
+  text-align: center;
+}
+/* 基础样式 */
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: #fff; /* 默认白色字体 */
+  text-align: center; /* 居中显示消息文本 */
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 轻微的阴影效果增加深度感 */
+}
+
+/* 成功消息 */
+.success {
+  background-color: #4CAF50; /* 鲜绿色背景表示成功 */
+}
+
+/* 错误消息 */
+.error {
+  background-color: #f44336; /* 深红色背景表示错误 */
+}
+
+/* 警告消息 */
+.warning {
+  background-color: #ff9800; /* 橙色背景表示警告 */
+}
+
+/* 信息消息 */
+.info {
+  background-color: #2196F3; /* 蓝色背景表示一般信息 */
+}
