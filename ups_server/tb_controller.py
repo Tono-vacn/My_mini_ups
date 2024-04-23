@@ -90,14 +90,14 @@ def start_trucks(world_id, pos_x, pos_y, truck_num):
     session.close()
   pass
 
-def modify_truck_status(truck_id, status, pos_x, pos_y, world_id, a_seq):
+def modify_truck_status(truck_id, status, pos_x, pos_y, world_id):
   session = session_local()
   try:
     truck = session.query(Truck).filter(Truck.truck_id == truck_id and Truck.truck_world == world_id).first()
     truck.truck_status = status
     truck.pos_x = pos_x if pos_x != None else truck.pos_x
     truck.pos_y = pos_y if pos_y != None else truck.pos_y
-    truck.a_seq = a_seq if a_seq != None else truck.a_seq
+    # truck.a_seq = a_seq if a_seq != None else truck.a_seq
     # truck.truck_world
     session.commit()
   except Exception as e:
@@ -246,7 +246,7 @@ def get_pkg_whid(pkg_id, world_id):
   finally:
     session.close()
     
-def get_seqnum_call_truck(pkg_id, world_id):
+def get_seqnum(pkg_id, world_id):
   session = session_local()
   try:
     pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world == world_id).first()
@@ -256,12 +256,24 @@ def get_seqnum_call_truck(pkg_id, world_id):
   finally:
     session.close()
     
-def get_seqnum_deliver(truck_id, world_id):
+def set_pkg_seq(pkg_id, world_id, seq):
   session = session_local()
   try:
-    truck = session.query(Truck).filter(Truck.truck_id == truck_id and Truck.truck_world == world_id).first()
-    return truck.a_seq if truck != None else None
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world == world_id).first()
+    pkg.a_seq = seq
+    session.commit()
   except Exception as e:
     print(f"An error occurred: {e}")
+    session.rollback()
   finally:
     session.close()
+    
+# def get_seqnum_deliver(truck_id, world_id):
+#   session = session_local()
+#   try:
+#     truck = session.query(Truck).filter(Truck.truck_id == truck_id and Truck.truck_world == world_id).first()
+#     return truck.a_seq if truck != None else None
+#   except Exception as e:
+#     print(f"An error occurred: {e}")
+#   finally:
+#     session.close()

@@ -78,7 +78,7 @@ def gen_world_truck_deliver(truck_id, seqnum, pkg_id, dst_x, dst_y):
 
 # send amazon message
 
-def gen_amazon_arrive(UACommands, whnum, truck_id, pack_id):
+def gen_amazon_arrive(UACommands, whnum, truck_id, pack_id, a_seq):
     arrive = UACommands.ua_truck_arrive.add()
     arrive.whnum = whnum
     arrive.truckid = truck_id

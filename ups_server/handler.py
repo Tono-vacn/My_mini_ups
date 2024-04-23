@@ -94,7 +94,8 @@ def ready_deliver_handler(au_ready_deliver, world_id, amazon_socket, world_socke
     # modify the package status
     
     UCommand = gen_world_truck_deliver(truck_id, cur_seq, pkg_id, dstx, dsty)
-    modify_truck_status(truck_id, "D", None, None, world_id, a_seq)
+    modify_truck_status(truck_id, "D", None, None, world_id)
+    set_pkg_seq(pkg_id, world_id, a_seq)
     load_deliver_pkg(pkg_id, world_id)
     email_addr = get_pkg_email(pkg_id, world_id)
     send_email(email_addr, "Your package is on the way") if email_addr!=None else None
@@ -119,16 +120,11 @@ def arrive_complete(finished, world_id, amazon_socket, world_socket):
     truck_id, addr_x, addr_y = get_truck_info(finished)
     modify_truck_status(truck_id, "L", addr_x, addr_y, world_id)
     # TODO: send truck_arrived to Amazon
-    UACommand = proto_amazon.UACommands()
-    # print("when arrive at warehouse")
-    # print(UACommand)
-    # find package id
     pack_id = get_single_pkg_to_pkup(truck_id, world_id, addr_x, addr_y)
     wh_id = get_pkg_whid(pack_id, world_id)
-    gen_amazon_arrive(UACommand, wh_id, truck_id, pack_id)
-    write_delimited_to(UACommand, amazon_socket)
-    # send_msg(UACommand, amazon_socket)
-    # print("after send")
+    # gen_amazon_arrive(UACommand, wh_id, truck_id, pack_id)
+    Uaresponse = gen_ua_truck_arrive(wh_id, truck_id, pack_id, get_seqnum(pack_id, world_id))
+    write_delimited_to(Uaresponse, amazon_socket)
     return
 
 def finished_handler(finished, world_id, amazon_socket, world_socket):
@@ -148,7 +144,7 @@ def delivery_made_handler(deliver, world_id, amazon_socket, world_socket):
     package_id = deliver.packageid
     deliver_done_pkg(package_id, world_id)
     _, dest_x, dest_y = get_pkg_truckid(package_id, world_id)
-    a_seq = get_seqnum_deliver(truck_id, world_id)
+    a_seq = get_seqnum(package_id, world_id)
     UAresponse = gen_ua_delivered(package_id, dest_x, dest_y, a_seq)
     write_delimited_to(UAresponse, amazon_socket)
     user_email = get_pkg_email(package_id, world_id)
