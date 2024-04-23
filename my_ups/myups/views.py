@@ -71,8 +71,12 @@ def change_email(request):
 
 def check_package(request):
   pkg_id = request.POST.get('package_id')
-  package = Package_tmp.objects.get(pk = pkg_id)
-  return render(request, 'myups/package.html', {'packages': package})
+  try:
+    package = Package_tmp.objects.get(pk = pkg_id)
+    return render(request, 'myups/package.html', {'packages': [package]})
+  except Exception as e:
+    messages.info(request, 'Invalid package id'+str(e))
+    return redirect('index')
   
 def check_all_packages(request, user_id):
   cur_user = request.user

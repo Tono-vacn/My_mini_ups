@@ -8,7 +8,7 @@
 
 {% block body %}
     
-    {% if pkgs %}
+    {% if packages %}
     <h1 align = "center">
       {% comment %} <img src="{% static 'myUPS/image/packages.png' %}"height="50" width="50"> {% endcomment %}
       Your package's detail</h1>
@@ -63,10 +63,7 @@
                 <th><center>{{ p.pkg_user.user.username }}</center></th>
                 <th>
                     <center>
-                    <a href="{% url 'change_dest' pkg_id=p.pkg_id %}">
-                {% comment %} <label>
-                        <input type="radio" name="package_id" value="{{ p.pkg_id }}">
-                     </label> {% endcomment %}
+                    <a href="{% url 'change_dest' pkg_id=p.pkg_id %}">Change Destination</a>
                     </center>
                      </th>
             </tr>
@@ -85,13 +82,13 @@
     {% endif %}
     <center><h1>No Package Founded!</h1></center>
     {% if user.is_authenticated  %}
-    <a href="{% url 'loading'%}">
+    <a href="{% url 'pkup_pkg'%}">
     <button  class="btn btn-success" name = "pickup" value="pickup"><span class="glyphicon glyphicon-th-list"></span>&nbsp; wait for pickup</button>
     </a>
-    <a href="{% url 'out'%}">
+    <a href="{% url 'load_pkg'%}">
     <button  class="btn btn-success" name = "loaded" value="loaded"><span class="glyphicon glyphicon-th-list"></span>&nbsp; out for delivery</button>
     </a>
-    <a href="{% url 'arrive'%}">
+    <a href="{% url 'delivered_pkg'%}">
     <button  class="btn btn-success" name = "out" value="out"><span class="glyphicon glyphicon-th-list"></span>&nbsp; arrived</button>
     </a>
     {% endif %}
