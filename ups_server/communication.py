@@ -76,15 +76,6 @@ def gen_world_truck_deliver(truck_id, seqnum, pkg_id, dst_x, dst_y):
     deliver.seqnum = seqnum
     return UCommands
 
-# send amazon message
-
-def gen_amazon_arrive(UACommands, whnum, truck_id, pack_id, a_seq):
-    arrive = UACommands.ua_truck_arrive.add()
-    arrive.whnum = whnum
-    arrive.truckid = truck_id
-    arrive.packageid = pack_id
-    # return UACommands
-
 if __name__ == "__main__":
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

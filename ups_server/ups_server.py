@@ -12,7 +12,7 @@ from communication import *
 from manage_db import *
 from handler import *
 
-world_host = "vcm-39267.vm.duke.edu"
+world_host = "67.159.94.27"
 world_port = 12345
 amazon_port = 9000
 
