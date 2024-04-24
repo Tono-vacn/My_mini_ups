@@ -1,5 +1,6 @@
 from manage_db import *
 import time
+DEBUG = 1
 
 def create_world(world_id, curr):
   # insert new world into world
@@ -93,7 +94,7 @@ def start_trucks(world_id, pos_x, pos_y, truck_num):
 def modify_truck_status(truck_id, status, pos_x, pos_y, world_id):
   session = session_local()
   try:
-    truck = session.query(Truck).filter(Truck.truck_id == truck_id and Truck.truck_world_id == world_id).first()
+    truck = session.query(Truck).filter(Truck.truck_id == truck_id, Truck.truck_world_id == world_id).first()
     truck.truck_status = status
     truck.pos_x = pos_x if pos_x != None else truck.pos_x
     truck.pos_y = pos_y if pos_y != None else truck.pos_y
@@ -112,7 +113,9 @@ def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_i
   try:
     pkg = Package()
     pkg.pkg_id = pkg_id
-    pkg.pkg_user_id = user_id
+    cur_user_id = session.query(BaseUser).filter(BaseUser.username == user_id).first().id
+    cur_acc_id = session.query(Account).filter(Account.user_id == cur_user_id).first().id
+    pkg.pkg_user_id = cur_acc_id
     pkg.pkg_truck_id = truck_id
     pkg.wharehouse_id = wh_id
     pkg.wharehouse_x = wh_x
@@ -134,7 +137,7 @@ def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_i
 def load_deliver_pkg(pkg_id, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
     pkg.pkg_status = "DING"
     pkg.ld_time = time.ctime(time.time())
     session.commit()
@@ -147,7 +150,7 @@ def load_deliver_pkg(pkg_id, world_id):
 def deliver_done_pkg(pkg_id, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
     pkg.pkg_status = "DED"
     pkg.del_time = time.ctime(time.time())
     session.commit()
@@ -161,7 +164,7 @@ def deliver_done_pkg(pkg_id, world_id):
 def modify_destination(pkg_id, pos_x, pos_y, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
     pkg.dst_x = pos_x
     pkg.dst_y = pos_y
     session.commit()
@@ -173,9 +176,11 @@ def modify_destination(pkg_id, pos_x, pos_y, world_id):
     
 def get_pkg_truckid(pkg_id, world_id):
   session = session_local()
+  print(f"enter pkg truckid: {pkg_id}, {world_id}") if DEBUG else None
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
-    return pkg.pkg_truck_id, pkg.dst_x, pkg.dst_y if pkg != None else None, None, None
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
+    print(f"pkg_truck_id: {pkg.pkg_truck_id}, pkg_x: {pkg.dst_x}, pkg_y: {pkg.dst_y}") if DEBUG else None
+    return (pkg.pkg_truck_id, pkg.dst_x, pkg.dst_y) if pkg is not None else (None, None, None)
   except Exception as e:
     print(f"An error occurred: {e}")
     session.rollback()
@@ -185,9 +190,10 @@ def get_pkg_truckid(pkg_id, world_id):
 def get_pkg_email(pkg_id, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
-    acc = session.query(Account).filter(Account.user_id == pkg.pkg_user_id).first()
-    return acc.user.email if acc != None else None
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
+    acc = session.query(Account).filter(Account.id == pkg.pkg_user_id).first()
+    cur_user = session.query(BaseUser).filter(BaseUser.id == acc.user_id).first()
+    return cur_user.email if cur_user is not None else None
   except Exception as e:
     print(f"An error occurred: {e}")
     session.rollback()
@@ -197,7 +203,7 @@ def get_pkg_email(pkg_id, world_id):
 def get_single_pkg_to_pkup(truck_id, world_id, wh_x, wh_y):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_status == "T" and Package.world_id == world_id and Package.wharehouse_x == wh_x and Package.wharehouse_y == wh_y and Package.pkg_truck_id == truck_id).first()
+    pkg = session.query(Package).filter(Package.pkg_status == "T", Package.world_id == world_id, Package.wharehouse_x == wh_x, Package.wharehouse_y == wh_y, Package.pkg_truck_id == truck_id).first()
     return pkg.pkg_id if pkg != None else None
   except Exception as e:
     print(f"An error occurred: {e}")
@@ -206,9 +212,11 @@ def get_single_pkg_to_pkup(truck_id, world_id, wh_x, wh_y):
     session.close()
     
 def get_truck(world_id):
+  print(f"in get_truck") if DEBUG else None
   session = session_local()
+  print_table(Truck) if DEBUG else None
   try:
-    truck = session.query(Truck).filter(Truck.truck_world_id == world_id and Truck.truck_status == "I").first()
+    truck = session.query(Truck).filter(Truck.truck_world_id == world_id, Truck.truck_status == "I").first()
     return truck.truck_id if truck != None else None
   except Exception as e:
     print(f"An error occurred: {e}")
@@ -218,8 +226,8 @@ def get_truck(world_id):
 def get_pkg_status(pkg_id, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
-    return pkg.pkg_status, pkg.pkg_truck_id if pkg != None else None, None
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
+    return (pkg.pkg_status, pkg.pkg_truck_id) if pkg is not None else (None, None)
   except Exception as e:
     print(f"An error occurred: {e}")
   finally:
@@ -228,8 +236,8 @@ def get_pkg_status(pkg_id, world_id):
 def get_pkg_time(pkg_id, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
-    return pkg.pkup_time, pkg.ld_time, pkg.del_time if pkg != None else None, None, None
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
+    return (pkg.pkup_time, pkg.ld_time, pkg.del_time) if pkg is not None else (None, None, None)
   except Exception as e:
     print(f"An error occurred: {e}")
   finally:
@@ -239,7 +247,7 @@ def get_pkg_time(pkg_id, world_id):
 def get_pkg_whid(pkg_id, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
     return pkg.wharehouse_id if pkg != None else None
   except Exception as e:
     print(f"An error occurred: {e}")
@@ -249,7 +257,7 @@ def get_pkg_whid(pkg_id, world_id):
 def get_seqnum(pkg_id, world_id):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
     return pkg.a_seq if pkg != None else None
   except Exception as e:
     print(f"An error occurred: {e}")
@@ -259,7 +267,7 @@ def get_seqnum(pkg_id, world_id):
 def set_pkg_seq(pkg_id, world_id, seq):
   session = session_local()
   try:
-    pkg = session.query(Package).filter(Package.pkg_id == pkg_id and Package.world_id == world_id).first()
+    pkg = session.query(Package).filter(Package.pkg_id == pkg_id, Package.world_id == world_id).first()
     pkg.a_seq = seq
     session.commit()
   except Exception as e:

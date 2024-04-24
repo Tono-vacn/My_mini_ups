@@ -8,7 +8,7 @@ import time
 import threading
 from concurrent.futures import ThreadPoolExecutor
 import smtplib
-
+DEBUG = 1
 seqnum = 1
 seq_mutex = threading.Lock()
 # locks = []  # lock the packages when need to change their status
@@ -20,15 +20,18 @@ ack_mutex = threading.Lock()
 ### utils for handler
 
 def generate_seqnum():
+    print(f"generate seqnum") if DEBUG else None
     global seqnum
     seq_mutex.acquire()
     cur_seq = seqnum
     seqnum += 1
     seq_mutex.release()
+    print(f"cur_seq: {cur_seq}") if DEBUG else None
     return cur_seq
 
 def err_handler(err_message, source):
     print(source+" error: "+err_message)
+    print("FINISH ERROR") if DEBUG else None
     return 
 
 def chck_ack(cur_seq):
@@ -62,35 +65,40 @@ def send_email(email_addr, content):
 
 def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket, a_seq):
     cur_seq = generate_seqnum()
+    print(au_call_truck) if DEBUG else None
     pkg_id = au_call_truck.packageid
     dstx = au_call_truck.destx
     dsty = au_call_truck.desty
-    whid = au_call_truck.whnum
+    whid = au_call_truck.wh.whnum
     whx = au_call_truck.wh.whx
     why = au_call_truck.wh.why
     acc = au_call_truck.order.ups_userid
+    print(f"pkg_id: {pkg_id}, dstx: {dstx}, dsty: {dsty}, whid: {whid}, whx: {whx}, why: {why}, acc: {acc}") if DEBUG else None
     truck_id = get_truck(world_id)
     while truck_id == None:
         truck_id = get_truck(world_id)
+    print(f"truck_id: {truck_id}, package_id: {pkg_id}") if DEBUG else None
     init_pkg(pkg_id, acc, truck_id, whid, whx, why, dstx, dsty, world_id, a_seq)
     UCommand = gen_world_truck_pkup(truck_id, whid, cur_seq)
     modify_truck_status(truck_id, "T", None, None, world_id)
     send_blk(UCommand, world_socket, cur_seq)
+    print("FINISH AMAZON CALL TRUCK") if DEBUG else None
     pass
 
 def ready_deliver_handler(au_ready_deliver, world_id, amazon_socket, world_socket, a_seq):
     cur_seq = generate_seqnum()
     truck_id = au_ready_deliver.truckid
-    pkg_id = au_ready_deliver.packageid
-    dstx = au_ready_deliver.destx
-    dsty = au_ready_deliver.desty
-    whid = au_ready_deliver.whnum
-    
+    pkg_id = str(au_ready_deliver.packageid)
+    dstx = str(au_ready_deliver.destx)
+    dsty = str(au_ready_deliver.desty)
+    whid = str(au_ready_deliver.whnum)
+    print(f"truck_id: {truck_id}, pkg_id: {pkg_id}, dstx: {dstx}, dsty: {dsty}, whid: {whid}") if DEBUG else None
     # check the package status with local data
     tkid, dx, dy = get_pkg_truckid(pkg_id, world_id)
     if tkid!=truck_id or dx!=dstx or dy!=dsty:
         print("package status not match", "amazon")
 
+    print(f"truck_id: {tkid}, dx: {dx}, dy: {dy}") if DEBUG else None
     # modify the package status
     
     UCommand = gen_world_truck_deliver(truck_id, cur_seq, pkg_id, dstx, dsty)
@@ -98,8 +106,11 @@ def ready_deliver_handler(au_ready_deliver, world_id, amazon_socket, world_socke
     set_pkg_seq(pkg_id, world_id, a_seq)
     load_deliver_pkg(pkg_id, world_id)
     email_addr = get_pkg_email(pkg_id, world_id)
-    send_email(email_addr, "Your package is on the way") if email_addr!=None else None
+    print(email_addr) if DEBUG else None
+    # send_email(email_addr, "Your package is on the way") if email_addr!=None else None
+    print("email sent") if DEBUG else None
     send_blk(UCommand, world_socket, cur_seq)
+    print("FINISH AMAZON READY DELIVER") if DEBUG else None
     pass
 
 ### Handler for world
@@ -116,12 +127,18 @@ def arrive_complete(finished, world_id, amazon_socket, world_socket):
     # get truck_id, wh_location, truck status
     # change truck status to "l"
     # send truck_arrived to Amazon
+    print(f"enter arrive handler: {finished}") if DEBUG else None
     send_world_ack(world_socket, finished.seqnum)
     truck_id, addr_x, addr_y = get_truck_info(finished)
+    addr_x = str(addr_x)
+    addr_y = str(addr_y)
     modify_truck_status(truck_id, "L", addr_x, addr_y, world_id)
     pack_id = get_single_pkg_to_pkup(truck_id, world_id, addr_x, addr_y)
+    print(f"pack_id: {pack_id}") if DEBUG else None
     wh_id = get_pkg_whid(pack_id, world_id)
+    print(f"wh_id: {wh_id}") if DEBUG else None
     Uaresponse = gen_ua_truck_arrive(wh_id, truck_id, pack_id, get_seqnum(pack_id, world_id))
+    print(f"Uaresponse: {Uaresponse}") if DEBUG else None
     write_delimited_to(Uaresponse, amazon_socket)
     return
 
@@ -131,6 +148,7 @@ def finished_handler(finished, world_id, amazon_socket, world_socket):
     else:
         print("enter arrive handler")
         arrive_complete(finished, world_id, amazon_socket, world_socket)
+    print("FINISH WORLD FINISHED") if DEBUG else None
     return
 
 def delivery_made_handler(deliver, world_id, amazon_socket, world_socket):
@@ -139,7 +157,7 @@ def delivery_made_handler(deliver, world_id, amazon_socket, world_socket):
     # send delivered to Amazon
     send_world_ack(world_socket, deliver.seqnum)
     truck_id = deliver.truckid
-    package_id = deliver.packageid
+    package_id = str(deliver.packageid)
     deliver_done_pkg(package_id, world_id)
     _, dest_x, dest_y = get_pkg_truckid(package_id, world_id)
     a_seq = get_seqnum(package_id, world_id)
@@ -148,7 +166,8 @@ def delivery_made_handler(deliver, world_id, amazon_socket, world_socket):
     user_email = get_pkg_email(package_id, world_id)
     if user_email != None:
         msg = "Your package has been successfully delivered!\nThanks for choosing UPS service!"
-        send_email(user_email, msg)
+        # send_email(user_email, msg)
+    print("FINISH WORLD DELIVERY MADE") if DEBUG else None
     return
 
 def query_handler(truckstatus, world_id):
@@ -190,19 +209,21 @@ def amazon_handler(world_id, amazon_socket, world_socket):
         try:
             AUCommand = parse_delimited_from(AUCommand, amazon_socket)
         except Exception as e:
-            print(e)
+            print(f"!!!ERROR!!! {e}")
             # print("Amazon closed the connection, or some error occurred")
             continue
         print("recv from amazon")
         print(AUCommand)
         print("recv finished")
         if AUCommand.HasField("au_call_truck"):
+            print(f"Deal with call truck") if DEBUG else None
             pool.submit(call_truck_handler, AUCommand.au_call_truck, world_id, amazon_socket, world_socket, AUCommand.seqnum)
             pass
         if AUCommand.HasField("au_ready_deliver"):
+            print(f"Deal with ready deliver") if DEBUG else None
             pool.submit(ready_deliver_handler, AUCommand.au_ready_deliver, world_id, amazon_socket, world_socket, AUCommand.seqnum)
             pass
         if AUCommand.HasField("err"):
+            print(f"Deal with error") if DEBUG else None
             pool.submit(err_handler, AUCommand.err, "amazon")
             pass
-

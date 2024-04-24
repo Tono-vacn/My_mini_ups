@@ -16,6 +16,7 @@ World = Base.classes.myups_world
 Account = Base.classes.myups_account_tmp
 Truck = Base.classes.myups_truck_set
 Package = Base.classes.myups_package_tmp
+BaseUser = Base.classes.auth_user
 
 def delete_all():
     meta = MetaData()
@@ -55,6 +56,20 @@ def init_db():
 
     finally:
         session.close()
+        
+def print_table(Table):
+    # Create a new session
+    session = session_local()
+
+    # Query all rows in the World table
+    entries = session.query(Table).all()
+
+    # Print all rows
+    for entry in entries:
+        print(entry)
+
+    # Close the session
+    session.close()
 
 def does_world_exist(world_id):
     session = session_local()

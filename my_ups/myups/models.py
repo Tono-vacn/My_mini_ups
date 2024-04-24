@@ -30,9 +30,9 @@ class Package_tmp(models.Model):
     dst_y = models.CharField(max_length=30)
     STATUS = (('T',"TO PICK UP"),('LED',"LOADED"),('LING',"LOADING"),('DING','DELIVERING'), ('DED','DELIVERED'))
     pkg_status = models.CharField(max_length=4, choices=STATUS)
-    pkup_time = models.CharField(max_length=30)
-    ld_time = models.CharField(max_length=30)
-    del_time = models.CharField(max_length=30)
+    pkup_time = models.CharField(max_length=30, null=True, blank=True)
+    ld_time = models.CharField(max_length=30, null=True, blank=True)
+    del_time = models.CharField(max_length=30, null=True, blank=True)
     world = models.ForeignKey(World, on_delete=models.CASCADE)
     a_seq = models.IntegerField(null=True)# for call truck request
     
