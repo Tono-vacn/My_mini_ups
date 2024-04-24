@@ -46,14 +46,14 @@ def get_max_truck():
   finally:
     session.close()
   
-def check_acc(user_id):
+def check_acc(user_name):
   session = session_local()
   try:
-    acc = session.query(Account).filter(Account.user_id == user_id).first()
+    acc = session.query(BaseUser).filter(BaseUser.username == user_name).first()
     return acc is not None
   except Exception as e:
     print(f"An error occurred: {e}")
-    session.rollback()
+    # session.rollback()
   finally:
     session.close()
     

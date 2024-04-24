@@ -73,7 +73,13 @@ def gen_ua_delivered(pack_id, dest_x, dest_y, a_seq):
     
     return UAresponse
     
-    
+def gen_ua_err(msg, a_seq):
+    UAresponse = proto_amazon.UAResponse()
+    UAresponse.type = 3
+    UAresponse.ack = a_seq
+    UAresponse.err = msg
+    return UAresponse
+    pass
 
 def gen_world_truck_deliver(truck_id, seqnum, pkg_id, dst_x, dst_y):
     UCommands = proto_world.UCommands()

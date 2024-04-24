@@ -73,6 +73,13 @@ def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket, a_s
     whx = au_call_truck.wh.whx
     why = au_call_truck.wh.why
     acc = au_call_truck.order.ups_userid
+    
+    if check_acc(acc) == False:
+        print("sent account from amazon does not exist")
+        UResponse = gen_ua_err("Account not exist", a_seq)
+        write_delimited_to(UResponse, amazon_socket)
+        return
+    
     print(f"pkg_id: {pkg_id}, dstx: {dstx}, dsty: {dsty}, whid: {whid}, whx: {whx}, why: {why}, acc: {acc}") if DEBUG else None
     truck_id = get_truck(world_id)
     while truck_id == None:
