@@ -68,4 +68,4 @@ def does_world_exist(world_id):
         session.close()
         
 if __name__ == "__main__":
-    init_db()
+    delete_all()

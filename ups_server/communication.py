@@ -9,8 +9,8 @@ from message import *
 # Encode and decode messages
 def write_delimited_to(message, socket):
     serialized_message = message.SerializeToString()
-    print(len(serialized_message))
-    print(serialized_message)
+    # print(len(serialized_message))
+    # print(serialized_message)
     size = _VarintBytes(len(serialized_message))
     socket.sendall(size + serialized_message)
 
@@ -18,13 +18,15 @@ def parse_delimited_from(message, socket):
     raw_varint32 = b''
     while True:
         raw_varint32 += socket.recv(1)
+        print(raw_varint32)
         try:
             size = _DecodeVarint32(raw_varint32, 0)[0]
             break
         except IndexError:
             continue
-    print(size)
+    # print(size)
     serialized_message = socket.recv(size)
+    print(serialized_message)
     message.ParseFromString(serialized_message)
 
     return message

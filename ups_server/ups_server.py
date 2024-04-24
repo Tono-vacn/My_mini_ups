@@ -96,7 +96,7 @@ UCommandspeed = proto_world.UCommands()
 UCommandspeed.simspeed = 30000
 write_delimited_to(UCommandspeed, world_socket)
 
-UAConnected = proto_amazon.AUCommands()
+UAConnected = proto_amazon.UAConnected()
 UAConnected.worldid = connect_world_id
 UAConnected.ack = connect_ack
 write_delimited_to(UAConnected, amazon_socket)
@@ -108,14 +108,5 @@ thread1 = threading.Thread(target=amazon_handler, name="amazon", args=(world_id,
 thread1.start()
 thread2 = threading.Thread(target=world_handler, name="world", args=(world_id, world_socket, amazon_socket,))
 thread2.start()
-while 1:
+while True:
     pass
-# except KeyboardInterrupt as k:
-#     print("ctrl c pressed")
-#     # disconnect 功能
-#     UACommand = ups_amazon_pb2.UACommands()
-#     UACommand.disconnect = True
-#     send_msg(UACommand, amazon_socket)
-#     UDisconn = ups_world_pb2.UCommands()
-#     UDisconn.disconnect = True
-#     send_msg(UDisconn, world_socket)

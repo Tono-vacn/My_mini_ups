@@ -186,22 +186,23 @@ def amazon_handler(world_id, amazon_socket, world_socket):
     num_threads = 5
     pool = ThreadPoolExecutor(num_threads)
     while 1:
-        AUCommands = proto_amazon.AUCommands()
+        AUCommand = proto_amazon.AUCommand()
         try:
-            AUCommands = parse_delimited_from(AUCommands, amazon_socket)
+            AUCommand = parse_delimited_from(AUCommand, amazon_socket)
         except Exception as e:
-            print("Amazon closed the connection, or some error occurred")
-            break
+            print(e)
+            # print("Amazon closed the connection, or some error occurred")
+            continue
         print("recv from amazon")
-        print(AUCommands)
+        print(AUCommand)
         print("recv finished")
-        if AUCommands.HasField("au_call_truck"):
-            pool.submit(call_truck_handler, AUCommands.au_call_truck, world_id, amazon_socket, world_socket, AUCommands.seqnum)
+        if AUCommand.HasField("au_call_truck"):
+            pool.submit(call_truck_handler, AUCommand.au_call_truck, world_id, amazon_socket, world_socket, AUCommand.seqnum)
             pass
-        if AUCommands.HasField("au_ready_deliver"):
-            pool.submit(ready_deliver_handler, AUCommands.au_ready_deliver, world_id, amazon_socket, world_socket, AUCommands.seqnum)
+        if AUCommand.HasField("au_ready_deliver"):
+            pool.submit(ready_deliver_handler, AUCommand.au_ready_deliver, world_id, amazon_socket, world_socket, AUCommand.seqnum)
             pass
-        if AUCommands.HasField("err"):
-            pool.submit(err_handler, AUCommands.err, "amazon")
+        if AUCommand.HasField("err"):
+            pool.submit(err_handler, AUCommand.err, "amazon")
             pass
 
