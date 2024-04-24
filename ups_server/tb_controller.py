@@ -108,7 +108,7 @@ def modify_truck_status(truck_id, status, pos_x, pos_y, world_id):
     session.close()
   pass
 
-def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_id, a_seq):
+def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_id, a_seq, pkg_desc, pkg_quant):
   session = session_local()
   try:
     pkg = Package()
@@ -126,6 +126,8 @@ def init_pkg(pkg_id, user_id, truck_id, wh_id, wh_x, wh_y, dst_x, dst_y, world_i
     pkg.pkup_time = time.ctime(time.time())
     pkg.world_id = world_id
     pkg.a_seq = a_seq
+    pkg.pkg_desc = pkg_desc
+    pkg.pkg_quant = pkg_quant
     session.add(pkg)
     session.commit()
   except Exception as e:

@@ -73,6 +73,8 @@ def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket, a_s
     whx = au_call_truck.wh.whx
     why = au_call_truck.wh.why
     acc = au_call_truck.order.ups_userid
+    pkg_desc = au_call_truck.order.pd_des
+    pkg_quant = str(au_call_truck.order.quantity)
     
     if check_acc(acc) == False:
         print("sent account from amazon does not exist")
@@ -85,7 +87,7 @@ def call_truck_handler(au_call_truck, world_id, amazon_socket ,world_socket, a_s
     while truck_id == None:
         truck_id = get_truck(world_id)
     print(f"truck_id: {truck_id}, package_id: {pkg_id}") if DEBUG else None
-    init_pkg(pkg_id, acc, truck_id, whid, whx, why, dstx, dsty, world_id, a_seq)
+    init_pkg(pkg_id, acc, truck_id, whid, whx, why, dstx, dsty, world_id, a_seq, pkg_desc, pkg_quant)
     UCommand = gen_world_truck_pkup(truck_id, whid, cur_seq)
     modify_truck_status(truck_id, "T", None, None, world_id)
     send_blk(UCommand, world_socket, cur_seq)

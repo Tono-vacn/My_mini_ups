@@ -34,5 +34,7 @@ class Package_tmp(models.Model):
     ld_time = models.CharField(max_length=30, null=True, blank=True)
     del_time = models.CharField(max_length=30, null=True, blank=True)
     world = models.ForeignKey(World, on_delete=models.CASCADE)
+    pkg_desc = models.CharField(max_length=100, null=True, blank=True)
+    pkg_quant = models.CharField(max_length=30, null=True, blank=True)
     a_seq = models.IntegerField(null=True)# for call truck request
     

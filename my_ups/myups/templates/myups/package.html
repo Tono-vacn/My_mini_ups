@@ -36,6 +36,8 @@
         <thead>
             <tr>
                 <th>Package ID</th>
+                <th>Package Description</th>
+                <th>Item Quantity</th>
                 <th>Warehouse ID</th>
                 <th>Warehouse Spot</th>
                 <th>Destination</th>
@@ -51,6 +53,8 @@
             {% for p in packages %}
             <tr>
                 <td>{{ p.pkg_id }}</td>
+                <td>{{ p.pkg_desc }}</td>
+                <td>{{ p.quant }}</td>
                 <td>{{ p.wharehouse_id }}</td>
                 <td>{{ p.wharehouse_x }}, {{ p.wharehouse_y }}</td>
                 <td>{{ p.dst_x }}, {{ p.dst_y }}</td>
