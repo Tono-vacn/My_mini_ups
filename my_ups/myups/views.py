@@ -23,10 +23,14 @@ def user_register(request):
       new_user = authenticate(username=ipt_form.cleaned_data['username'], password=ipt_form.cleaned_data['password'])
       new_acc = Account_tmp()
       new_acc.user = new_user
-      world = World.objects.get(active_status = True)
-      new_acc.account_world = world
-      new_acc.save()
-      return redirect('user_login')
+      try:
+        world = World.objects.get(active_status = True)
+        new_acc.account_world = world
+        new_acc.save()
+        return redirect('user_login')
+      except Exception as e:
+        messages.error(request, 'No active world found')
+        return redirect('user_register')
     else:
       messages.error(request, 'Invalid form')
       pass
